@@ -24,8 +24,12 @@ export default function AdminLoginPage() {
     try {
       await signIn(email, password);
       navigate('/admin/gallery');
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.');
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Failed to sign in. Please check your credentials.';
+      setError(message || 'Failed to sign in. Please check your credentials.');
     } finally {
       setLoading(false);
     }

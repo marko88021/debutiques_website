@@ -18,6 +18,14 @@ const PricingPage = lazy(() => import('@/pages/PricingPage'));
 const AdminLoginPage = lazy(() => import('@/pages/AdminLoginPage'));
 const AdminGalleryPage = lazy(() => import('@/pages/AdminGalleryPage'));
 
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (options: { url: string; parentElement: Element }) => void;
+    };
+  }
+}
+
 // Utility: load external script once
 function loadScriptOnce(src: string) {
   if (document.querySelector(`script[src="${src}"]`)) return;
@@ -36,7 +44,7 @@ function CalendlyDeferredLoader() {
 
   useEffect(() => {
     // If there is no Calendly embed on this route, do nothing.
-    const target = document.querySelector('.calendly-inline-widget');
+    const target = document.querySelector<HTMLElement>('.calendly-inline-widget');
     if (!target) return;
 
     let loaded = false;
@@ -48,9 +56,9 @@ function CalendlyDeferredLoader() {
       
       // Add a small delay and check if Calendly loaded
       setTimeout(() => {
-        if ((window as any).Calendly) {
+        if (window.Calendly) {
           console.log('Calendly loaded successfully');
-          (window as any).Calendly.initInlineWidget({
+          window.Calendly.initInlineWidget({
             url: 'https://calendly.com/debutiques/meeting',
             parentElement: target
           });
@@ -82,7 +90,7 @@ function CalendlyDeferredLoader() {
     }, 5000); // Reduced from 15000ms
 
     return () => {
-      try { io.disconnect(); } catch {}
+      io.disconnect();
       window.clearTimeout(fallback);
     };
   }, [pathname]);
@@ -103,8 +111,9 @@ function MediaContextGuard() {
         e.preventDefault();
       }
     };
-    document.addEventListener('contextmenu', onCtx, { capture: true });
-    return () => document.removeEventListener('contextmenu', onCtx, { capture: true } as any);
+    const listenerOptions: AddEventListenerOptions = { capture: true };
+    document.addEventListener('contextmenu', onCtx, listenerOptions);
+    return () => document.removeEventListener('contextmenu', onCtx, listenerOptions);
   }, []);
   return null;
 }

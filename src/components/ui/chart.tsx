@@ -18,7 +18,6 @@ interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
     name: string;
     value: number;
   }[];
-  variant?: "line" | "bar";
   showXAxis?: boolean;
   showYAxis?: boolean;
   showGrid?: boolean;
@@ -29,7 +28,6 @@ interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Chart({
   data,
-  variant = "line",
   showXAxis = true,
   showYAxis = true,
   showGrid = true,

@@ -19,7 +19,7 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
   const [category, setCategory] = useState<'product' | 'interior' | 'video'>('product');
   const [uploading, setUploading] = useState(false);
 
-  const handleManualAdd = async (e: React.FormEvent) => {
+  const handleManualAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!title) {
@@ -51,7 +51,7 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
       onUploadComplete();
       onOpenChange(false);
       resetForm();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Add error:', error);
       toast.error('Failed to add item');
     } finally {
@@ -90,7 +90,10 @@ export function UploadDialog({ open, onOpenChange, onUploadComplete }: UploadDia
 
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={(v: any) => setCategory(v)}>
+              <Select
+                value={category}
+                onValueChange={(value: 'product' | 'interior' | 'video') => setCategory(value)}
+              >
                 <SelectTrigger className="bg-neutral-800 border-neutral-700">
                   <SelectValue />
                 </SelectTrigger>

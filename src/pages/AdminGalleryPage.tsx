@@ -26,10 +26,16 @@ import { SortableGalleryItem } from '@/components/admin/SortableGalleryItem';
 import { UploadDialog } from '@/components/admin/UploadDialog';
 import { ReplaceDialog } from '@/components/admin/ReplaceDialog';
 
+const galleryCategoryValues = ['all', 'product', 'interior', 'video'] as const;
+type GalleryCategory = typeof galleryCategoryValues[number];
+
+const isGalleryCategory = (value: string): value is GalleryCategory =>
+  galleryCategoryValues.includes(value as GalleryCategory);
+
 export default function AdminGalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<GalleryItem[]>([]);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'product' | 'interior' | 'video'>('all');
+  const [activeCategory, setActiveCategory] = useState<GalleryCategory>('all');
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -60,7 +66,7 @@ export default function AdminGalleryPage() {
       setLoading(true);
       const data = await galleryService.getAllItems();
       setItems(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Failed to load gallery items');
       console.error(error);
     } finally {
@@ -114,7 +120,7 @@ export default function AdminGalleryPage() {
       await galleryService.updateDisplayOrder(updates);
       setHasChanges(false);
       toast.success('Gallery order saved successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Failed to save order');
       console.error(error);
     }
@@ -127,7 +133,7 @@ export default function AdminGalleryPage() {
       await galleryService.deleteItem(id);
       setItems(items.filter(item => item.id !== id));
       toast.success('Item deleted successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Failed to delete item');
       console.error(error);
     }
@@ -142,7 +148,7 @@ export default function AdminGalleryPage() {
       setItems(items.filter(item => !selectedItems.has(item.id)));
       setSelectedItems(new Set());
       toast.success(`${selectedItems.size} items deleted successfully`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error('Failed to delete items');
       console.error(error);
     }
@@ -169,6 +175,12 @@ export default function AdminGalleryPage() {
     await signOut();
     navigate('/admin/login');
   }
+
+  const handleCategoryChange = (value: string) => {
+    if (isGalleryCategory(value)) {
+      setActiveCategory(value);
+    }
+  };
 
   if (loading) {
     return (
@@ -245,7 +257,7 @@ export default function AdminGalleryPage() {
           )}
         </div>
 
-        <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as any)}>
+        <Tabs value={activeCategory} onValueChange={handleCategoryChange}>
           <TabsList className="bg-neutral-900 border border-neutral-800">
             <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:text-black">
               All ({items.length})

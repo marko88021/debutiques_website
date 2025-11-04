@@ -47,7 +47,7 @@ export function ReplaceDialog({ open, onOpenChange, item, onReplaceComplete }: R
       toast.success('Item replaced successfully');
       onReplaceComplete();
       onOpenChange(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Replace error:', error);
       toast.error('Failed to replace item');
     } finally {

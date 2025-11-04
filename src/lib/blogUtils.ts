@@ -13,8 +13,8 @@ export interface BlogPost {
   category_id: string | null;
   created_at: string;
   updated_at: string;
-  category?: BlogCategory;
-  tags?: BlogTag[];
+  category: BlogCategory | null;
+  tags: BlogTag[];
 }
 
 export interface BlogCategory {
@@ -31,6 +31,25 @@ export interface BlogTag {
   slug: string;
   created_at: string;
 }
+
+type BlogPostRow = Omit<BlogPost, 'category' | 'tags'> & {
+  category: BlogCategory | null;
+  blog_post_tags: Array<{ tag: BlogTag | null }> | null;
+};
+
+const mapSupabasePost = (post: BlogPostRow): BlogPost => {
+  const { blog_post_tags, ...rest } = post;
+  const tags =
+    blog_post_tags
+      ?.map((pt) => pt.tag)
+      .filter((tag): tag is BlogTag => Boolean(tag)) ?? [];
+
+  return {
+    ...rest,
+    category: post.category ?? null,
+    tags,
+  };
+};
 
 export async function getAllPosts(limit?: number) {
   let query = supabase
@@ -55,11 +74,8 @@ export async function getAllPosts(limit?: number) {
     return [];
   }
 
-  return (data || []).map((post: any) => ({
-    ...post,
-    category: post.category || null,
-    tags: post.blog_post_tags?.map((pt: any) => pt.tag).filter(Boolean) || [],
-  })) as BlogPost[];
+  const posts = (data ?? []) as BlogPostRow[];
+  return posts.map(mapSupabasePost);
 }
 
 export async function getPostBySlug(slug: string) {
@@ -82,11 +98,7 @@ export async function getPostBySlug(slug: string) {
 
   if (!data) return null;
 
-  return {
-    ...data,
-    category: data.category || null,
-    tags: data.blog_post_tags?.map((pt: any) => pt.tag).filter(Boolean) || [],
-  } as BlogPost;
+  return mapSupabasePost(data as BlogPostRow);
 }
 
 export async function getPostsByCategory(categorySlug: string, limit?: number) {
@@ -121,11 +133,8 @@ export async function getPostsByCategory(categorySlug: string, limit?: number) {
     return [];
   }
 
-  return (data || []).map((post: any) => ({
-    ...post,
-    category: post.category || null,
-    tags: post.blog_post_tags?.map((pt: any) => pt.tag).filter(Boolean) || [],
-  })) as BlogPost[];
+  const posts = (data ?? []) as BlogPostRow[];
+  return posts.map(mapSupabasePost);
 }
 
 export async function getPostsByTag(tagSlug: string, limit?: number) {
@@ -144,7 +153,7 @@ export async function getPostsByTag(tagSlug: string, limit?: number) {
 
   if (!postTags || postTags.length === 0) return [];
 
-  const postIds = postTags.map(pt => pt.post_id);
+  const postIds = postTags.map((pt: { post_id: string }) => pt.post_id);
 
   let query = supabase
     .from('blog_posts')
@@ -169,11 +178,8 @@ export async function getPostsByTag(tagSlug: string, limit?: number) {
     return [];
   }
 
-  return (data || []).map((post: any) => ({
-    ...post,
-    category: post.category || null,
-    tags: post.blog_post_tags?.map((pt: any) => pt.tag).filter(Boolean) || [],
-  })) as BlogPost[];
+  const posts = (data ?? []) as BlogPostRow[];
+  return posts.map(mapSupabasePost);
 }
 
 export async function searchPosts(searchTerm: string) {
@@ -194,11 +200,8 @@ export async function searchPosts(searchTerm: string) {
     return [];
   }
 
-  return (data || []).map((post: any) => ({
-    ...post,
-    category: post.category || null,
-    tags: post.blog_post_tags?.map((pt: any) => pt.tag).filter(Boolean) || [],
-  })) as BlogPost[];
+  const posts = (data ?? []) as BlogPostRow[];
+  return posts.map(mapSupabasePost);
 }
 
 export async function getAllCategories() {

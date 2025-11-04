@@ -97,7 +97,7 @@ export default function BlogPostPage() {
           });
           setShowShareMenu(false);
           return;
-        } catch (error) {
+        } catch {
           toast({
             title: 'Failed to copy',
             description: 'Please try again.',
