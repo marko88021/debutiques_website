@@ -43,8 +43,9 @@ export function Hero({
               console.warn('Video error occurred, using fallback background');
               setVideoError(true);
             }}
+            onLoadedData={() => console.log('Video data loaded')}
           >
-            <source src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCRnhJUlFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--118236dbe30255cc452245d35c9a85528f19cec1/-Mediabench%20Assembly%20Animation%20MEDIUM%20QUALITY%20smaller.mp4" type="video/mp4" />
+            <source src="/assets/video/freecompress-MediabenchAnimation.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         )}

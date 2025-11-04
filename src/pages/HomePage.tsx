@@ -270,10 +270,9 @@ function HomePage() {
     { label: t('navigation.services'), ref: servicesRef, id: 'services' },
     { label: t('navigation.showcase'), ref: showcaseRef, id: 'showcase' },
     { label: t('navigation.process'), ref: processRef, id: 'process' },
-    { label: 'About', ref: aboutRef, id: 'about' },
+    { label: t('navigation.about'), ref: aboutRef, id: 'about' },
     { label: 'Blog', ref: null, id: 'blog', link: '/blog' },
     { label: 'Pricing', ref: null, id: 'pricing', link: '/pricing' },
-    { label: t('navigation.schedule'), ref: scheduleRef, id: 'schedule' },
     { label: t('navigation.contact'), ref: footerRef, id: 'footer' },
   ];
 
@@ -400,28 +399,40 @@ function HomePage() {
         video.currentTime = 0;
         const playPromise = video.play();
         if (playPromise !== undefined) await playPromise;
-      } catch { setVideoError(true); }
+      } catch (err) {
+        console.warn('Autoplay prevented or failed, waiting for user interaction to resume.', err);
+        setVideoLoaded(false);
+      }
     };
 
     try {
       video.load();
-      const timer = setTimeout(() => playVideo(), 100);
-      return () => {
-        clearTimeout(timer);
-        video.removeEventListener('canplay', handleCanPlay);
-        video.removeEventListener('error', handleError);
-        video.removeEventListener('loadeddata', handleLoadedData);
-      };
-    } catch { setVideoError(true); }
+    } catch (err) {
+      console.error('Video failed to load', err);
+      setVideoError(true);
+      return;
+    }
+
+    const timer = setTimeout(() => playVideo(), 100);
+    return () => {
+      clearTimeout(timer);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('error', handleError);
+      video.removeEventListener('loadeddata', handleLoadedData);
+    };
   }, []);
 
   // Unmute/play after first interaction (mobile)
   useEffect(() => {
     const handleUserInteraction = () => {
       const video = heroVideoRef.current;
-      if (video && video.muted && !videoError) {
-        video.muted = true;
-        if (video.paused) { video.play().catch(() => setVideoError(true)); }
+      if (video && !videoError) {
+        if (video.paused) {
+          video
+            .play()
+            .then(() => setVideoLoaded(true))
+            .catch((err) => console.warn('Video playback still blocked after interaction.', err));
+        }
       }
     };
     document.addEventListener('click', handleUserInteraction, { once: true });
@@ -970,7 +981,19 @@ function HomePage() {
           </p>
         </div>
         <div className="px-6 md:px-4 pb-6">
-          <div className="calendly-inline-widget" data-url="https://calendly.com/debutiques/meeting" style={{ minWidth: '320px', height: '1000px' }} />
+          <div className="max-w-4xl mx-auto">
+            <div 
+              className="calendly-inline-widget"
+              data-url="https://calendly.com/debutiques/meeting"
+              style={{ 
+                minWidth: '320px', 
+                height: '1000px',
+                border: 'none',
+                borderRadius: '8px',
+                overflow: 'hidden'
+              }}
+            />
+          </div>
         </div>
       </section>
 

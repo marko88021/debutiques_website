@@ -43,7 +43,21 @@ function CalendlyDeferredLoader() {
     const loadCalendly = () => {
       if (loaded) return;
       loaded = true;
+      console.log('Loading Calendly script...');
       loadScriptOnce('https://assets.calendly.com/assets/external/widget.js');
+      
+      // Add a small delay and check if Calendly loaded
+      setTimeout(() => {
+        if ((window as any).Calendly) {
+          console.log('Calendly loaded successfully');
+          (window as any).Calendly.initInlineWidget({
+            url: 'https://calendly.com/debutiques/meeting',
+            parentElement: target
+          });
+        } else {
+          console.log('Calendly script loaded but Calendly object not found');
+        }
+      }, 1000);
     };
 
     // 1) Load when the widget is about to be visible
@@ -51,17 +65,21 @@ function CalendlyDeferredLoader() {
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
+            console.log('Calendly widget is intersecting, loading...');
             loadCalendly();
             io.disconnect();
           }
         });
       },
-      { rootMargin: '600px' } // pre-load just before it scrolls into view
+      { rootMargin: '200px' } // Reduced from 600px for better desktop detection
     );
     io.observe(target);
 
-    // 2) Fallback: load after some idle time (first user session)
-    const fallback = window.setTimeout(loadCalendly, 15000);
+    // 2) Fallback: load after some idle time (reduced for desktop)
+    const fallback = window.setTimeout(() => {
+      console.log('Calendly fallback timer triggered');
+      loadCalendly();
+    }, 5000); // Reduced from 15000ms
 
     return () => {
       try { io.disconnect(); } catch {}

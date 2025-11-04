@@ -57,7 +57,13 @@ export function Navigation() {
                 >
                   {t('navigation.process')}
                 </button>
-                </div>
+                <button
+                  onClick={() => scrollToSection('about')}
+                  className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors hover-underline"
+                >
+                  Our Story
+                </button>
+              </div>
             </div>
 
             {/* Language Switcher & Mobile Menu Button */}
@@ -132,6 +138,16 @@ export function Navigation() {
                 <div className="flex items-center justify-between">
                   <span className="text-white text-lg font-medium">{t('navigation.process')}</span>
                   <span className="mobile-menu-number text-sm">03</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => scrollToSection('about')}
+                className="mobile-menu-item"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-lg font-medium">Our Story</span>
+                  <span className="mobile-menu-number text-sm">04</span>
                 </div>
               </button>              
             </div>

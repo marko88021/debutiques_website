@@ -104,14 +104,15 @@ export function CookieConsentModal({
                 <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                   <Button
                     onClick={onAcceptAll}
-                    className="flex-1 sm:flex-none primary-button bg-white text-black hover:bg-gray-200 px-6 py-2 text-sm font-medium"
+                    variant="ghost"
+                    className="flex-1 sm:flex-none bg-white text-black hover:bg-gray-200 shadow px-6 py-2 text-sm font-medium border border-white/10"
                   >
                     {t('cookieConsent.buttons.acceptAll')}
                   </Button>
                   <Button
                     onClick={onDeclineAll}
-                    variant="secondary"
-                    className="flex-1 sm:flex-none bg-neutral-800 text-white hover:bg-neutral-700 border border-white/20 px-6 py-2 text-sm font-medium"
+                    variant="ghost"
+                    className="flex-1 sm:flex-none bg-neutral-900 text-white hover:bg-neutral-800 border border-white/20 px-6 py-2 text-sm font-medium"
                   >
                     {t('cookieConsent.buttons.declineAll')}
                   </Button>
@@ -167,14 +168,15 @@ export function CookieConsentModal({
               <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Button
                   onClick={handleSavePreferences}
-                  className="flex-1 sm:flex-none primary-button bg-white text-black hover:bg-gray-200 px-6 py-2 text-sm font-medium"
+                  variant="ghost"
+                  className="flex-1 sm:flex-none bg-white text-black hover:bg-gray-200 shadow px-6 py-2 text-sm font-medium border border-white/10"
                 >
                   {t('cookieConsent.buttons.savePreferences')}
                 </Button>
                 <Button
                   onClick={onAcceptAll}
-                  variant="secondary"
-                  className="flex-1 sm:flex-none bg-neutral-800 text-white hover:bg-neutral-700 border border-white/20 px-6 py-2 text-sm font-medium"
+                  variant="ghost"
+                  className="flex-1 sm:flex-none bg-white text-black hover:bg-gray-200 shadow px-6 py-2 text-sm font-medium border border-white/10"
                 >
                   {t('cookieConsent.buttons.acceptAll')}
                 </Button>

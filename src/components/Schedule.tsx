@@ -41,7 +41,7 @@ export function Schedule() {
         <div className="max-w-4xl mx-auto">
           <div 
             className="calendly-inline-widget bg-neutral-950 rounded-lg overflow-hidden border border-neutral-800"
-            data-url="https://calendly.com/your-calendly-link"
+            data-url="https://calendly.com/debutiques/meeting"
             style={{ minWidth: '320px', height: '700px' }}
           ></div>
         </div>
