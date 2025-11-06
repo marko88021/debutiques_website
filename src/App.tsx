@@ -43,56 +43,16 @@ function CalendlyDeferredLoader() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // If there is no Calendly embed on this route, do nothing.
-    const target = document.querySelector<HTMLElement>('.calendly-inline-widget');
-    if (!target) return;
+    // Simple approach: load Calendly after a short delay
+    const timer = setTimeout(() => {
+      const target = document.querySelector('.calendly-inline-widget');
+      if (target && !document.querySelector('script[src*="calendly"]')) {
+        console.log('Loading Calendly script...');
+        loadScriptOnce('https://assets.calendly.com/assets/external/widget.js');
+      }
+    }, 2000); // 2 second delay
 
-    let loaded = false;
-    const loadCalendly = () => {
-      if (loaded) return;
-      loaded = true;
-      console.log('Loading Calendly script...');
-      loadScriptOnce('https://assets.calendly.com/assets/external/widget.js');
-      
-      // Add a small delay and check if Calendly loaded
-      setTimeout(() => {
-        if (window.Calendly) {
-          console.log('Calendly loaded successfully');
-          window.Calendly.initInlineWidget({
-            url: 'https://calendly.com/debutiques/meeting',
-            parentElement: target
-          });
-        } else {
-          console.log('Calendly script loaded but Calendly object not found');
-        }
-      }, 1000);
-    };
-
-    // 1) Load when the widget is about to be visible
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            console.log('Calendly widget is intersecting, loading...');
-            loadCalendly();
-            io.disconnect();
-          }
-        });
-      },
-      { rootMargin: '200px' } // Reduced from 600px for better desktop detection
-    );
-    io.observe(target);
-
-    // 2) Fallback: load after some idle time (reduced for desktop)
-    const fallback = window.setTimeout(() => {
-      console.log('Calendly fallback timer triggered');
-      loadCalendly();
-    }, 5000); // Reduced from 15000ms
-
-    return () => {
-      io.disconnect();
-      window.clearTimeout(fallback);
-    };
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   return null;

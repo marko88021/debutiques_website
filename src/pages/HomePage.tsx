@@ -993,6 +993,12 @@ function HomePage() {
                 overflow: 'hidden'
               }}
             />
+            {/* Direct Calendly script loader */}
+            <script
+              type="text/javascript"
+              src="https://assets.calendly.com/assets/external/widget.js"
+              async
+            ></script>
           </div>
         </div>
       </section>
