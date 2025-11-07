@@ -37,6 +37,20 @@ type BlogPostRow = Omit<BlogPost, 'category' | 'tags'> & {
   blog_post_tags: Array<{ tag: BlogTag | null }> | null;
 };
 
+const sanitizeSearchTerm = (rawTerm: string) => {
+  const normalized = rawTerm.normalize('NFKC').trim();
+  if (!normalized) {
+    return '';
+  }
+
+  const stripped = normalized.replace(/[^\p{L}\p{N}\s'-]/gu, '');
+  const collapsedWhitespace = stripped.replace(/\s+/g, ' ');
+
+  // Escape Supabase/PostgreSQL wildcard characters to avoid pattern manipulation
+  const escaped = collapsedWhitespace.replace(/[%_]/g, (char) => `\\${char}`);
+  return escaped.trim();
+};
+
 const mapSupabasePost = (post: BlogPostRow): BlogPost => {
   const { blog_post_tags, ...rest } = post;
   const tags =
@@ -183,6 +197,18 @@ export async function getPostsByTag(tagSlug: string, limit?: number) {
 }
 
 export async function searchPosts(searchTerm: string) {
+  const sanitizedTerm = sanitizeSearchTerm(searchTerm);
+  if (!sanitizedTerm) {
+    return [];
+  }
+
+  const pattern = `%${sanitizedTerm}%`;
+  const orFilter = [
+    `title.ilike.${pattern}`,
+    `content.ilike.${pattern}`,
+    `excerpt.ilike.${pattern}`,
+  ].join(',');
+
   const { data, error } = await supabase
     .from('blog_posts')
     .select(`
@@ -192,7 +218,7 @@ export async function searchPosts(searchTerm: string) {
     `)
     .eq('status', 'published')
     .lte('publish_date', new Date().toISOString())
-    .or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
+    .or(orFilter)
     .order('publish_date', { ascending: false });
 
   if (error) {

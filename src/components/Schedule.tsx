@@ -1,10 +1,17 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCookieConsent } from '@/hooks/useCookieConsent';
 
 export function Schedule() {
   const { t } = useTranslation();
+  const { hasConsent } = useCookieConsent();
+  const marketingAllowed = hasConsent('marketing');
 
   useEffect(() => {
+    if (!marketingAllowed) {
+      return;
+    }
+
     // Ensure Calendly script is loaded
     const script = document.createElement('script');
     script.src = 'https://assets.calendly.com/assets/external/widget.js';
@@ -22,7 +29,7 @@ export function Schedule() {
         existingScript.parentNode.removeChild(existingScript);
       }
     };
-  }, []);
+  }, [marketingAllowed]);
 
   return (
     <section id="schedule" className="py-16 md:py-24 bg-neutral-950 text-white">
@@ -39,11 +46,17 @@ export function Schedule() {
 
         {/* Calendly Embed */}
         <div className="max-w-4xl mx-auto">
-          <div 
-            className="calendly-inline-widget bg-neutral-950 rounded-lg overflow-hidden border border-neutral-800"
-            data-url="https://calendly.com/debutiques/meeting"
-            style={{ minWidth: '320px', height: '700px' }}
-          ></div>
+          {marketingAllowed ? (
+            <div 
+              className="calendly-inline-widget bg-neutral-950 rounded-lg overflow-hidden border border-neutral-800"
+              data-url="https://calendly.com/debutiques/meeting"
+              style={{ minWidth: '320px', height: '700px' }}
+            ></div>
+          ) : (
+            <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-8 text-center text-gray-300">
+              <p>{t('schedule.consentRequired', 'Enable marketing cookies to load the scheduling widget.')}</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

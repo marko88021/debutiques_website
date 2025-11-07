@@ -4,7 +4,7 @@ import { useCookieConsent } from '@/hooks/useCookieConsent';
 declare global {
   interface Window {
     gtag: (...args: unknown[]) => void;
-    dataLayer: Array<Record<string, unknown>>;
+    dataLayer: Array<unknown>;
   }
 }
 
@@ -27,20 +27,19 @@ export function ScriptLoader() {
     // Check if already loaded
     if (typeof window.gtag !== 'undefined') return;
 
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = (...args: unknown[]) => {
+      window.dataLayer.push(args);
+    };
+
     // Load Google Analytics
     const script1 = document.createElement('script');
     script1.async = true;
     script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-3J4GFD3G8G';
     document.head.appendChild(script1);
 
-    const script2 = document.createElement('script');
-    script2.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-3J4GFD3G8G');
-    `;
-    document.head.appendChild(script2);
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-3J4GFD3G8G');
 
     console.log('Google Analytics loaded with consent');
   };
@@ -48,22 +47,26 @@ export function ScriptLoader() {
   const loadMarketingScripts = () => {
     // Load Google Tag Manager if not already loaded
     if (!document.querySelector('script[src*="gtm.js"]')) {
-      const script = document.createElement('script');
-      script.innerHTML = `
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-T7Q7GQN2');
-      `;
-      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js',
+      });
+
+      const gtmScript = document.createElement('script');
+      gtmScript.async = true;
+      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-T7Q7GQN2';
+      document.head.appendChild(gtmScript);
 
       // Add noscript fallback
       const noscript = document.createElement('noscript');
-      noscript.innerHTML = `
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7Q7GQN2"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      `;
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.googletagmanager.com/ns.html?id=GTM-T7Q7GQN2';
+      iframe.height = '0';
+      iframe.width = '0';
+      iframe.style.display = 'none';
+      iframe.style.visibility = 'hidden';
+      noscript.appendChild(iframe);
       document.body.appendChild(noscript);
 
       console.log('Google Tag Manager loaded with consent');

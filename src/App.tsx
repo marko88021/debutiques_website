@@ -35,14 +35,22 @@ function loadScriptOnce(src: string) {
   document.body.appendChild(s);
 }
 
+interface CalendlyDeferredLoaderProps {
+  enabled: boolean;
+}
+
 /**
  * Calendly: inject only when the inline widget is on screen (or after 15s idle).
- * This avoids loading ~90–120KB of JS on first paint.
+ * This avoids loading ~90-120KB of JS on first paint.
  */
-function CalendlyDeferredLoader() {
+function CalendlyDeferredLoader({ enabled }: CalendlyDeferredLoaderProps) {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     // Simple approach: load Calendly after a short delay
     const timer = setTimeout(() => {
       const target = document.querySelector('.calendly-inline-widget');
@@ -53,7 +61,7 @@ function CalendlyDeferredLoader() {
     }, 2000); // 2 second delay
 
     return () => clearTimeout(timer);
-  }, [pathname]);
+  }, [pathname, enabled]);
 
   return null;
 }
@@ -85,7 +93,9 @@ function AppShell() {
     declineAll,
     savePreferences,
     closeModal,
+    hasConsent,
   } = useCookieConsent();
+  const marketingAllowed = hasConsent('marketing');
 
   return (
     <BrowserRouter>
@@ -97,7 +107,7 @@ function AppShell() {
           <ScriptLoader />
 
           {/* Defer Calendly until needed */}
-          <CalendlyDeferredLoader />
+          <CalendlyDeferredLoader enabled={marketingAllowed} />
 
           {/* Scope right-click block to media only */}
           <MediaContextGuard />
