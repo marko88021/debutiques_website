@@ -21,7 +21,7 @@ import {
   formatDate,
   calculateReadingTime,
   type BlogPost,
-} from '@/lib/staticBlogUtils';
+} from '@/lib/blogUtils';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
