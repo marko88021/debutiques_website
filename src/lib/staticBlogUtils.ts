@@ -1,5 +1,3 @@
-import matter from 'gray-matter';
-
 export interface BlogPost {
   id: string;
   title: string;
