@@ -15,7 +15,7 @@ import {
   type BlogPost,
   type BlogCategory,
   type BlogTag,
-} from '@/lib/blogUtils';
+} from '@/lib/staticBlogUtils';
 
 export default function BlogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
