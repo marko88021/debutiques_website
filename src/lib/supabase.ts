@@ -3,11 +3,17 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+let supabase: any = null;
+
+// Only initialize Supabase if credentials are available
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+} else {
+  // Create a mock client that won't crash if missing credentials
+  console.warn('Supabase credentials not found. Blog features will be limited.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase };
 
 export type Database = {
   public: {

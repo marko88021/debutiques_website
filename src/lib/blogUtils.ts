@@ -66,6 +66,10 @@ const mapSupabasePost = (post: BlogPostRow): BlogPost => {
 };
 
 export async function getAllPosts(limit?: number) {
+  if (!supabase) {
+    return [];
+  }
+  
   let query = supabase
     .from('blog_posts')
     .select(`
