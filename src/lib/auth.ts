@@ -57,7 +57,7 @@ export const authService = {
   },
 
   onAuthStateChange(callback: (user: User | null) => void) {
-    return supabase.auth.onAuthStateChange((_event, session) => {
+    return supabase.auth.onAuthStateChange((_event: any, session: any) => {
       callback(session?.user ?? null);
     });
   }
