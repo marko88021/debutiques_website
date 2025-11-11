@@ -988,11 +988,6 @@ function HomePage() {
               data-url="https://calendly.com/debutiques/meeting"
               style={{ minWidth: '320px', height: '700px' }}
             ></div>
-            <script
-              type="text/javascript"
-              src="https://assets.calendly.com/assets/external/widget.js"
-              async
-            ></script>
             {/* Calendly inline widget end */}
           </div>
         </div>

@@ -93,9 +93,7 @@ function AppShell() {
     declineAll,
     savePreferences,
     closeModal,
-    hasConsent,
   } = useCookieConsent();
-  const marketingAllowed = hasConsent('marketing');
 
   return (
     <BrowserRouter>
@@ -106,8 +104,8 @@ function AppShell() {
           {/* Load marketing/analytics only after consent */}
           <ScriptLoader />
 
-          {/* Defer Calendly until needed */}
-          <CalendlyDeferredLoader enabled={marketingAllowed} />
+          {/* Defer Calendly until needed - always enabled */}
+          <CalendlyDeferredLoader enabled={true} />
 
           {/* Scope right-click block to media only */}
           <MediaContextGuard />
