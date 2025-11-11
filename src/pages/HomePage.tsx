@@ -982,23 +982,18 @@ function HomePage() {
         </div>
         <div className="px-6 md:px-4 pb-6">
           <div className="max-w-4xl mx-auto">
+            {/* Calendly inline widget begin */}
             <div 
               className="calendly-inline-widget"
               data-url="https://calendly.com/debutiques/meeting"
-              style={{ 
-                minWidth: '320px', 
-                height: '1000px',
-                border: 'none',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}
-            />
-            {/* Direct Calendly script loader */}
+              style={{ minWidth: '320px', height: '700px' }}
+            ></div>
             <script
               type="text/javascript"
               src="https://assets.calendly.com/assets/external/widget.js"
               async
             ></script>
+            {/* Calendly inline widget end */}
           </div>
         </div>
       </section>
