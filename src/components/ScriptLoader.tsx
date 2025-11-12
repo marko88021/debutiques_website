@@ -5,6 +5,7 @@ declare global {
   interface Window {
     gtag: (...args: unknown[]) => void;
     dataLayer: Array<unknown>;
+    clarity: (...args: unknown[]) => void;
   }
 }
 
@@ -15,6 +16,7 @@ export function ScriptLoader() {
     // Load Google Analytics if analytics consent is given
     if (hasConsent('analytics')) {
       loadGoogleAnalytics();
+      loadMicrosoftClarity(); // Load Clarity with analytics consent
     }
 
     // Load other marketing scripts if marketing consent is given
@@ -42,6 +44,23 @@ export function ScriptLoader() {
     window.gtag('config', 'G-3J4GFD3G8G');
 
     console.log('Google Analytics loaded with consent');
+  };
+
+  const loadMicrosoftClarity = () => {
+    // Check if already loaded
+    if (typeof window.clarity !== 'undefined') return;
+
+    // Microsoft Clarity tracking code
+    (function(c: any, l: any, a: any, r: any, i: any, t?: any, y?: any) {
+      c[a] = c[a] || function() { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "u4oodkc7ju");
+
+    console.log('Microsoft Clarity loaded with consent');
   };
 
   const loadMarketingScripts = () => {
