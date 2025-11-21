@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Linkedin, Instagram, ShieldCheck } from 'lucide-react';
+import { useCookieConsent } from '../hooks/useCookieConsent';
 
 export function Footer() {
   const { t, i18n } = useTranslation();
+  const { openModal } = useCookieConsent();
   console.log('Active language:', i18n.language);
   const currentYear = new Date().getFullYear();
 
@@ -90,6 +92,15 @@ export function Footer() {
                   <ShieldCheck className="h-4 w-4 mr-2 text-gray-500 group-hover:text-gray-300" />
                   {t('navigation.privacy')}
                 </Link>
+              </li>
+              <li>
+                <button
+                  onClick={openModal}
+                  className="text-neutral-400 hover:text-white transition-colors duration-200 flex items-center overflow-hidden group"
+                >
+                  <span className="w-0 group-hover:w-2 h-px bg-white transition-all duration-200 mr-0 group-hover:mr-2"></span>
+                  {t('footer.cookieSettings', 'Cookie Settings')}
+                </button>
               </li>              
             </ul>
           </div>

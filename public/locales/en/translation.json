@@ -178,7 +178,9 @@
     "connect": "Connect",
     "email": "info@debutiques.com",
     "locations": "Belgrade • Frankfurt",
-    "copyright": "© {{year}} Debutiques. All rights reserved."
+    "copyright": "© {{year}} Debutiques. All rights reserved.",
+    "cookieSettings": "Cookie Settings",
+    "rights": "All Rights Reserved"
   },
   "toast": {
     "messageSent": "Message sent!",
@@ -190,26 +192,22 @@
   },
   "cookieConsent": {
     "title": "Cookie Preferences",
-    "description": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking 'Accept All', you consent to our use of cookies.",
-    "simpleDescription": "We use cookies to improve your experience on our website. You can accept all cookies or customize your preferences.",
+    "description": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Our appointment scheduling service (Calendly) is classified as essential and runs regardless of your cookie preferences. By clicking 'Accept All', you consent to our use of cookies.",
+    "simpleDescription": "We use cookies to improve your experience on our website. Our appointment booking system (Calendly) uses cookies and is always active as it's essential for our service. You can accept all cookies or customize your preferences.",
     "required": "Always Active",
     "privacyPolicyLink": "Read our Privacy Policy",
     "category": {
       "essential": {
         "title": "Essential Cookies",
-        "description": "These cookies are necessary for the website to function and cannot be switched off. They are usually only set in response to actions made by you which amount to a request for services."
+        "description": "These cookies are necessary for the website to function and cannot be switched off. This includes our appointment scheduling service (Calendly) which is essential for booking meetings with our team."
       },
       "analytics": {
         "title": "Analytics Cookies",
-        "description": "These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve our website's performance."
+        "description": "These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve our website's performance. We use Google Analytics and Microsoft Clarity for this purpose."
       },
       "marketing": {
         "title": "Marketing Cookies",
-        "description": "These cookies are used to deliver personalized advertisements and track the effectiveness of our marketing campaigns. They may be set by us or third-party providers."
-      },
-      "preferences": {
-        "title": "Preference Cookies",
-        "description": "These cookies remember your choices and personalize your experience, such as your preferred language or region settings."
+        "description": "These cookies are used to deliver personalized advertisements and track the effectiveness of our marketing campaigns. They may be set by us or third-party providers through Google Tag Manager."
       }
     },
     "buttons": {

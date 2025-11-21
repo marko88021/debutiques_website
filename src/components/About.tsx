@@ -30,6 +30,11 @@ export function About() {
       name: 'Marko Bokan',
       role: 'Founder & Lead 3D Artist',
       description: 'Master of Architecture with 10 years of experience in high-end CGI and furniture visualization.'
+    },
+    {
+      name: 'Vladimir Danilovich',
+      role: 'Technical Director & Senior 3D Artist',
+      description: 'Architect and CGI/3D specialist with 10 years of experience in architectural visualization and photorealistic rendering.'
     }
   ];
 
@@ -62,27 +67,27 @@ Having worked closely with furniture designers and product developers, we unders
           </div>
 
           {/* Team Grid */}
-          <div className="max-w-2xl mx-auto">
-            <div className="grid grid-cols-1 gap-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {teamMembers.map((member, index) => (
                 <div
                   key={index}
                   className={`transition-all duration-1000 ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
+                  } ${index === 1 ? 'md:col-start-2' : ''}`}
                   style={{ transitionDelay: `${(index + 1) * 150}ms` }}
                 >
-                  {/* Team Photo */}
-                  {index === 0 && (
-                    <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-neutral-200 border border-neutral-300 max-w-md mx-auto">
+                  {/* Team Photo or Empty Space */}
+                  <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-neutral-200 border border-neutral-300 max-w-md mx-auto">
+                    {index === 0 && (
                       <img
                         src="/assets/IMG_7940 copy.webp"
                         alt={member.name}
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {/* Member Info */}
                   <div className="text-center">
@@ -92,9 +97,11 @@ Having worked closely with furniture designers and product developers, we unders
                     <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
                       {member.role}
                     </p>
-                    <p className="text-neutral-600 font-light leading-relaxed text-sm md:text-base">
-                      {member.description}
-                    </p>
+                    {member.description && (
+                      <p className="text-neutral-600 font-light leading-relaxed text-sm md:text-base">
+                        {member.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}

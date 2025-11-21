@@ -123,9 +123,94 @@ export function PrivacyPolicy() {
         </p>
 
         <h2 className="text-xl font-semibold text-white mb-4">10. Cookies and Similar Technologies</h2>
-        <p className="text-gray-300 mb-8">
-          We use cookies and similar technologies to enhance your experience, analyze traffic, and personalize content. You can manage your cookie preferences through your browser settings.
+        <p className="text-gray-300 mb-4">
+          We use cookies and similar technologies to enhance your experience, analyze traffic, and personalize content. You can manage your cookie preferences through your browser settings or by clicking "Cookie Settings" in the footer.
         </p>
+        
+        <h3 className="text-lg font-semibold text-white mb-3 mt-6">Third-Party Services</h3>
+        <p className="text-gray-300 mb-4">Our website uses the following third-party services that may collect and process your data:</p>
+        
+        <div className="space-y-4 mb-8">
+          <div className="border border-neutral-800 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Google Analytics & Google Tag Manager</h4>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Purpose:</strong> Website analytics, traffic analysis, and performance measurement.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Collected:</strong> IP address (anonymized), pages visited, session duration, device type, geographic location.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Provider:</strong> Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
+            </p>
+            <p className="text-gray-300 text-sm">
+              <strong>Privacy Policy:</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://policies.google.com/privacy</a>
+            </p>
+          </div>
+
+          <div className="border border-neutral-800 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Microsoft Clarity</h4>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Purpose:</strong> User behavior analytics, heatmaps, session recordings to improve user experience.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Collected:</strong> Mouse movements, clicks, scroll behavior, device information, pages visited.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Provider:</strong> Microsoft Corporation, One Microsoft Way, Redmond, WA 98052, USA
+            </p>
+            <p className="text-gray-300 text-sm">
+              <strong>Privacy Policy:</strong> <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://privacy.microsoft.com/privacystatement</a>
+            </p>
+          </div>
+
+          <div className="border border-neutral-800 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Calendly (Essential Service)</h4>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Purpose:</strong> Appointment scheduling and meeting coordination - classified as essential for core business functionality.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Collected:</strong> Name, email address, meeting preferences, timezone information.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Transfer:</strong> Your data is transferred to and processed in the United States.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Provider:</strong> Calendly LLC, 3423 Piedmont Road NE, Atlanta, GA 30305, USA
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Privacy Policy:</strong> <a href="https://calendly.com/privacy" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://calendly.com/privacy</a>
+            </p>
+            <p className="text-gray-300 text-sm">
+              <strong>Note:</strong> Calendly is loaded automatically as it is essential for booking meetings with our team. The widget uses cookies and runs regardless of your cookie preferences for non-essential services.
+            </p>
+          </div>
+
+          <div className="border border-neutral-800 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Supabase</h4>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Purpose:</strong> Backend authentication and content management for admin users only.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Collected:</strong> Admin login credentials (email and encrypted password), gallery management data.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Provider:</strong> Supabase Inc., 970 Toa Payoh North, #07-04, Singapore 318992
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Privacy Policy:</strong> <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://supabase.com/privacy</a>
+            </p>
+            <p className="text-gray-300 text-sm">
+              <strong>Note:</strong> Supabase is only used for administrative purposes and does not collect public visitor data.
+            </p>
+          </div>
+        </div>
+
+        <h3 className="text-lg font-semibold text-white mb-3">Cookie Categories</h3>
+        <ul className="list-disc pl-6 text-gray-300 mb-8">
+          <li><strong>Essential Cookies:</strong> Required for basic site functionality and core services, including our appointment scheduling system (Calendly). These cannot be disabled.</li>
+          <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site (Google Analytics, Microsoft Clarity).</li>
+          <li><strong>Marketing Cookies:</strong> Used to deliver relevant advertisements and track campaign performance (Google Tag Manager).</li>
+        </ul>
 
         <h2 className="text-xl font-semibold text-white mb-4">11. Changes to This Policy</h2>
         <p className="text-gray-300 mb-8">

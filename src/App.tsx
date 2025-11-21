@@ -37,17 +37,19 @@ function loadScriptOnce(src: string) {
 
 interface CalendlyDeferredLoaderProps {
   enabled: boolean;
+  consentGiven: boolean;
 }
 
 /**
  * Calendly: inject only when the inline widget is on screen (or after 15s idle).
  * This avoids loading ~90-120KB of JS on first paint.
+ * Now also respects cookie consent for functional/preferences cookies.
  */
-function CalendlyDeferredLoader({ enabled }: CalendlyDeferredLoaderProps) {
+function CalendlyDeferredLoader({ enabled, consentGiven }: CalendlyDeferredLoaderProps) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || !consentGiven) {
       return;
     }
 
@@ -61,7 +63,7 @@ function CalendlyDeferredLoader({ enabled }: CalendlyDeferredLoaderProps) {
     }, 2000); // 2 second delay
 
     return () => clearTimeout(timer);
-  }, [pathname, enabled]);
+  }, [pathname, enabled, consentGiven]);
 
   return null;
 }
@@ -104,8 +106,11 @@ function AppShell() {
           {/* Load marketing/analytics only after consent */}
           <ScriptLoader />
 
-          {/* Defer Calendly until needed - always enabled */}
-          <CalendlyDeferredLoader enabled={true} />
+          {/* Defer Calendly until needed */}
+          <CalendlyDeferredLoader 
+            enabled={true} 
+            consentGiven={true} 
+          />
 
           {/* Scope right-click block to media only */}
           <MediaContextGuard />

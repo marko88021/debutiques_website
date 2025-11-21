@@ -9,7 +9,6 @@ export interface CookieConsent {
   essential: boolean;
   analytics: boolean;
   marketing: boolean;
-  preferences: boolean;
   timestamp: number;
   version: string;
 }
@@ -18,7 +17,7 @@ export const COOKIE_CATEGORIES: CookieCategory[] = [
   {
     id: 'essential',
     name: 'Essential Cookies',
-    description: 'These cookies are necessary for the website to function and cannot be switched off.',
+    description: 'These cookies are necessary for the website to function and cannot be switched off. This includes our appointment scheduling service (Calendly) which is essential for booking meetings with our team.',
     required: true,
   },
   {
@@ -31,12 +30,6 @@ export const COOKIE_CATEGORIES: CookieCategory[] = [
     id: 'marketing',
     name: 'Marketing Cookies',
     description: 'These cookies are used to deliver personalized advertisements.',
-    required: false,
-  },
-  {
-    id: 'preferences',
-    name: 'Preference Cookies',
-    description: 'These cookies remember your choices and personalize your experience.',
     required: false,
   },
 ];
@@ -69,7 +62,6 @@ export const setConsent = (preferences: Partial<CookieConsent>): void => {
       essential: true, // Always true
       analytics: preferences.analytics || false,
       marketing: preferences.marketing || false,
-      preferences: preferences.preferences || false,
       timestamp: Date.now(),
       version: CONSENT_VERSION,
     };
@@ -104,7 +96,6 @@ export const acceptAllCookies = (): void => {
     essential: true,
     analytics: true,
     marketing: true,
-    preferences: true,
   });
 };
 
@@ -113,6 +104,5 @@ export const declineAllCookies = (): void => {
     essential: true,
     analytics: false,
     marketing: false,
-    preferences: false,
   });
 };
