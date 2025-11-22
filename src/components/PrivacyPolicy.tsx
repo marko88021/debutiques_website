@@ -186,6 +186,22 @@ export function PrivacyPolicy() {
           </div>
 
           <div className="border border-neutral-800 rounded-lg p-4">
+            <h4 className="text-white font-semibold mb-2">Apollo.io</h4>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Purpose:</strong> Website visitor tracking and lead intelligence for B2B sales and marketing purposes.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Data Collected:</strong> IP address, company information, pages visited, session duration, device type, referring URLs.
+            </p>
+            <p className="text-gray-300 text-sm mb-2">
+              <strong>Provider:</strong> Apollo.io Inc., 201 Spear Street, Suite 1100, San Francisco, CA 94105, USA
+            </p>
+            <p className="text-gray-300 text-sm">
+              <strong>Privacy Policy:</strong> <a href="https://www.apollo.io/privacy" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://www.apollo.io/privacy</a>
+            </p>
+          </div>
+
+          <div className="border border-neutral-800 rounded-lg p-4">
             <h4 className="text-white font-semibold mb-2">Supabase</h4>
             <p className="text-gray-300 text-sm mb-2">
               <strong>Purpose:</strong> Backend authentication and content management for admin users only.

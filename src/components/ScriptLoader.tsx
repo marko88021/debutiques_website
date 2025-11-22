@@ -6,6 +6,9 @@ declare global {
     gtag: (...args: unknown[]) => void;
     dataLayer: Array<unknown>;
     clarity: (...args: unknown[]) => void;
+    trackingFunctions?: {
+      onLoad: (config: { appId: string }) => void;
+    };
   }
 }
 
@@ -64,6 +67,9 @@ export function ScriptLoader() {
   };
 
   const loadMarketingScripts = () => {
+    // Load Apollo.io tracking
+    loadApolloTracking();
+
     // Load Google Tag Manager if not already loaded
     if (!document.querySelector('script[src*="gtm.js"]')) {
       window.dataLayer = window.dataLayer || [];
@@ -90,6 +96,25 @@ export function ScriptLoader() {
 
       console.log('Google Tag Manager loaded with consent');
     }
+  };
+
+  const loadApolloTracking = () => {
+    // Check if already loaded
+    if (document.querySelector('script[src*="apollo.io"]')) return;
+
+    const n = Math.random().toString(36).substring(7);
+    const o = document.createElement('script');
+    o.src = "https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache=" + n;
+    o.async = true;
+    o.defer = true;
+    o.onload = function() {
+      if (window.trackingFunctions) {
+        window.trackingFunctions.onLoad({ appId: "67a10ae27bb8ca01b0898c2d" });
+      }
+    };
+    document.head.appendChild(o);
+
+    console.log('Apollo.io tracking loaded with consent');
   };
 
   return null; // This component doesn't render anything
