@@ -64,10 +64,10 @@ export function Hero({
 
       <div className="container mx-auto px-6 md:px-12 relative z-20">
         <div className="max-w-4xl">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 sm:mb-6 tracking-tight leading-[1.1] text-left text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.8)] whitespace-pre-wrap">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal mb-4 sm:mb-6 tracking-tight leading-[1.1] text-left text-neutral-800 drop-shadow-[0_8px_32px_rgba(255,255,255,0.9)] whitespace-pre-wrap">
             {t('hero.title')}
           </h2>
-          <p className="text-lg sm:text-xl  md:text-2xl lg:text-3xl xl:text-4xl text-white mb-8 sm:mb-12 font-light text-left leading-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+          <p className="text-lg sm:text-xl  md:text-2xl lg:text-3xl xl:text-4xl text-neutral-800 mb-8 sm:mb-12 font-normal text-left leading-tight drop-shadow-[0_4px_16px_rgba(255,255,255,0.9)]">
             10+ years of experience helping furniture designers launch collections faster and boost sales with consistent, premium visuals.
           </p>
 
