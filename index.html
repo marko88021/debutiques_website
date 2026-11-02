@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Debutiques | 3D Furniture Visualization</title>
 
-    <link rel="canonical" href="https://debutiques.com/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://debutiques.com/" />
-    <meta name="twitter:card" content="summary_large_image" />
     <!-- SEO -->
-    <meta name="description" content="Furniture CGI for Scandinavian and European brands. Explore product renders, interior imagery and animations. Discuss your next collection with Debutiques." />
+    <meta name="description" content="Transform your furniture with 3D visuals that sell. High-quality renderings, animations, and 360° views for e-commerce." />
     <meta property="og:title" content="Debutiques | 3D Furniture Visualization" />
     <meta property="og:description" content="Transform your furniture with 3D visuals that sell." />
-    <meta property="og:image" content="https://debutiques.com/assets/interiors/A3_androgyne-dining_Gubi-Beetle-Front.jpg" />
+    <meta property="og:image" content="/assets/debutilogo2.png" />
     <meta name="theme-color" content="#000000" />
 
     <!-- Fonts: fast & safe -->
@@ -25,11 +21,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/hnl7dqk.css">
 
-    <link rel="preload" href="/assets/interiors/A3_androgyne-dining_Gubi-Beetle-Front.jpg" as="image" fetchpriority="high" />
+    <!-- Optional: Spline viewer (kept deferred; remove if unused anywhere) -->
+    <script
+      type="module"
+      src="https://unpkg.com/@splinetool/viewer@1.10.14/build/spline-viewer.js"
+      integrity="sha384-+PyLAGqKxoQbsXf6+JW7X646Mw/Sq8Zltd/mLCe+yTTPXfe0GVV2LWz5npyMPM2B"
+      crossorigin="anonymous"
+      defer
+    ></script>
+
+    <!-- Preload only critical, lightweight images (use .webp once converted) -->
+    <link rel="preload" href="/assets/interiors/Walnut_KitchenCloseup_01_Kitchen0001.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="/assets/debutilogo2.webp" as="image" type="image/webp" />
+
+    <!-- If you haven't converted yet, temporarily keep JPEG/PNG preloads:
+    <link rel="preload" href="/assets/interiors/Walnut_KitchenCloseup_01_Kitchen0001.jpg" as="image" type="image/jpeg" fetchpriority="high" />
+    <link rel="preload" href="/assets/debutilogo2.png" as="image" type="image/png" />
+    -->
+
+    <!-- IMPORTANT: No video/font file preloads to avoid network contention -->
   </head>
   <body>
     <div id="root"></div>
-    <noscript><p>Debutiques — furniture visualization, interior CGI and animation. Contact <a href="mailto:info@debutiques.com">info@debutiques.com</a> to discuss your project. Enable JavaScript to explore the portfolio.</p></noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

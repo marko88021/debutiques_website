@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Cookie-preferenser",
-    "description": "Valfria analys- och marknadsföringscookies hjälper oss att förstå hur webbplatsen används. Du kan acceptera eller avböja dem. Tidsbokning öppnas separat på Calendly först när du väljer länken.",
-    "simpleDescription": "Valfria analys- och marknadsföringscookies hjälper oss att förstå hur webbplatsen används. Du kan acceptera eller avböja dem. Tidsbokning öppnas separat på Calendly först när du väljer länken.",
+    "description": "Vi använder cookies för att förbättra din webbläsarupplevelse, leverera personaliserat innehåll och analysera vår trafik. Genom att klicka på 'Acceptera alla' samtycker du till vår användning av cookies.",
+    "simpleDescription": "Vi använder cookies för att förbättra din upplevelse på vår webbplats. Du kan acceptera alla cookies eller anpassa dina preferenser.",
     "required": "Alltid aktiv",
     "privacyPolicyLink": "Läs vår integritetspolicy",
     "category": {
       "essential": {
         "title": "Nödvändiga cookies",
-        "description": "Krävs för webbplatsens grundläggande funktioner och för att spara dina cookieinställningar."
+        "description": "Dessa cookies är nödvändiga för att webbplatsen ska fungera och kan inte stängas av. De ställs vanligtvis bara in som svar på åtgärder du utför."
       },
       "analytics": {
         "title": "Analys-cookies",

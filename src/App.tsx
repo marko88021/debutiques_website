@@ -1,21 +1,22 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { CookieConsentModal } from '@/components/CookieConsentModal';
 import { ScriptLoader } from '@/components/ScriptLoader';
 import { useCookieConsent } from '@/hooks/useCookieConsent';
-import { PageMetadata } from '@/components/PageMetadata';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import './App.css';
-import './furniture-refresh.css';
 
 const HomePage = lazy(() => import('@/pages/HomePage'));
 const PrivacyPolicy = lazy(() => import('@/components/PrivacyPolicy'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/PricingPage'));
-const AdminRoutes = lazy(() => import('@/components/AdminRoutes'));
+const AdminLoginPage = lazy(() => import('@/pages/AdminLoginPage'));
+const AdminGalleryPage = lazy(() => import('@/pages/AdminGalleryPage'));
 
 declare global {
   interface Window {
@@ -23,6 +24,68 @@ declare global {
       initInlineWidget: (options: { url: string; parentElement: Element }) => void;
     };
   }
+}
+
+// Utility: load external script once
+function loadScriptOnce(src: string) {
+  if (document.querySelector(`script[src="${src}"]`)) return;
+  const s = document.createElement('script');
+  s.src = src;
+  s.async = true;
+  document.body.appendChild(s);
+}
+
+interface CalendlyDeferredLoaderProps {
+  enabled: boolean;
+  consentGiven: boolean;
+}
+
+/**
+ * Calendly: inject only when the inline widget is on screen (or after 15s idle).
+ * This avoids loading ~90-120KB of JS on first paint.
+ * Now also respects cookie consent for functional/preferences cookies.
+ */
+function CalendlyDeferredLoader({ enabled, consentGiven }: CalendlyDeferredLoaderProps) {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (!enabled || !consentGiven) {
+      return;
+    }
+
+    // Simple approach: load Calendly after a short delay
+    const timer = setTimeout(() => {
+      const target = document.querySelector('.calendly-inline-widget');
+      if (target && !document.querySelector('script[src*="calendly"]')) {
+        console.log('Loading Calendly script...');
+        loadScriptOnce('https://assets.calendly.com/assets/external/widget.js');
+      }
+    }, 2000); // 2 second delay
+
+    return () => clearTimeout(timer);
+  }, [pathname, enabled, consentGiven]);
+
+  return null;
+}
+
+/**
+ * Light-touch asset protection:
+ * Prevent right-click only on media (img/video/canvas), not globally.
+ * Global blocks (select, keydown) harm accessibility & Best Practices.
+ */
+function MediaContextGuard() {
+  useEffect(() => {
+    const onCtx = (e: MouseEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (el && el.closest('img, video, canvas')) {
+        e.preventDefault();
+      }
+    };
+    const listenerOptions: AddEventListenerOptions = { capture: true };
+    document.addEventListener('contextmenu', onCtx, listenerOptions);
+    return () => document.removeEventListener('contextmenu', onCtx, listenerOptions);
+  }, []);
+  return null;
 }
 
 function AppShell() {
@@ -36,15 +99,21 @@ function AppShell() {
 
   return (
     <BrowserRouter>
-      
-        <div>
+      <AuthProvider>
+        <div className="no-select no-context-menu">
           <ScrollToTop />
-          <PageMetadata />
 
           {/* Load marketing/analytics only after consent */}
           <ScriptLoader />
 
+          {/* Defer Calendly until needed */}
+          <CalendlyDeferredLoader 
+            enabled={true} 
+            consentGiven={true} 
+          />
 
+          {/* Scope right-click block to media only */}
+          <MediaContextGuard />
 
           <Suspense
             fallback={
@@ -74,8 +143,15 @@ function AppShell() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/pricing" element={<PricingPage />} />
-              <Route path="/admin/*" element={<AdminRoutes />} />
-              <Route path="*" element={<main className="standalone-page"><Link to="/">← Debutiques</Link><h1>Page not found</h1><p>Explore our furniture portfolio or tell us about your project.</p><Link className="editorial-button" to="/">Return to the studio</Link></main>} />
+              <Route path="/admin/login" element={<AdminLoginPage />} />
+              <Route
+                path="/admin/gallery"
+                element={
+                  <ProtectedRoute>
+                    <AdminGalleryPage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </Suspense>
 
@@ -90,12 +166,21 @@ function AppShell() {
           <Toaster />
           <Sonner />
 
-
+        {/* Reserve space when cookie bar is visible (avoid CLS) */}
+        {showModal && (
+          <style>
+            {`
+              body { padding-bottom: 200px; }
+              @media (max-width: 768px) {
+                body { padding-bottom: 300px; }
+              }
+            `}
+          </style>
+        )}
         </div>
-      
+      </AuthProvider>
     </BrowserRouter>
   );
 }
 
 export default AppShell;
-

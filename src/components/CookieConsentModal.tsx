@@ -68,7 +68,7 @@ export function CookieConsentModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="fixed bottom-0 left-0 right-0 w-full max-w-full h-auto max-h-[90dvh] overflow-y-auto m-0 p-0 rounded-none border-0 bg-black/95 backdrop-blur-md text-white shadow-2xl transition-all duration-300 ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom !transform-none !top-auto !left-0 !right-0 !bottom-0 sm:!max-w-full md:!w-full">
+      <DialogContent className="fixed bottom-0 left-0 right-0 w-full max-w-full h-auto max-h-none m-0 p-0 rounded-none border-0 bg-black/95 backdrop-blur-md text-white shadow-2xl transition-all duration-300 ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom !transform-none !top-auto !left-0 !right-0 !bottom-0 sm:!max-w-full md:!w-full">
         {/* Close button for mobile */}
         <button
           onClick={onClose}
@@ -98,7 +98,9 @@ export function CookieConsentModal({
             // Simple view
             <div className="space-y-4">
               <div className="bg-white/5 p-4 rounded-lg border border-white/10">
-
+                <p className="text-sm text-gray-300 mb-4 text-center md:text-left">
+                  {t('cookieConsent.simpleDescription')}
+                </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                   <Button
                     onClick={onAcceptAll}

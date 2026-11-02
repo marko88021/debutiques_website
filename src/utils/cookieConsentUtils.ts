@@ -17,7 +17,7 @@ export const COOKIE_CATEGORIES: CookieCategory[] = [
   {
     id: 'essential',
     name: 'Essential Cookies',
-    description: 'These cookies are necessary for the website to function and cannot be switched off. Calendly is opened only through an optional external booking link.',
+    description: 'These cookies are necessary for the website to function and cannot be switched off. This includes our appointment scheduling service (Calendly) which is essential for booking meetings with our team.',
     required: true,
   },
   {

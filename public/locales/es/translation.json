@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Preferencias de cookies",
-    "description": "Las cookies opcionales de análisis y marketing nos ayudan a comprender el uso del sitio. Puedes aceptarlas o rechazarlas. La reserva de citas se abre por separado en Calendly solo cuando seleccionas el enlace.",
-    "simpleDescription": "Las cookies opcionales de análisis y marketing nos ayudan a comprender el uso del sitio. Puedes aceptarlas o rechazarlas. La reserva de citas se abre por separado en Calendly solo cuando seleccionas el enlace.",
+    "description": "Utilizamos cookies para mejorar tu experiencia de navegación, servir contenido personalizado y analizar nuestro tráfico. Al hacer clic en 'Aceptar todo', consientes nuestro uso de cookies.",
+    "simpleDescription": "Utilizamos cookies para mejorar tu experiencia en nuestro sitio web. Puedes aceptar todas las cookies o personalizar tus preferencias.",
     "required": "Siempre activo",
     "privacyPolicyLink": "Lee nuestra Política de Privacidad",
     "category": {
       "essential": {
         "title": "Cookies esenciales",
-        "description": "Necesarias para las funciones básicas del sitio y para guardar tus preferencias de cookies."
+        "description": "Estas cookies son necesarias para que el sitio web funcione y no se pueden desactivar. Generalmente solo se establecen en respuesta a acciones realizadas por ti."
       },
       "analytics": {
         "title": "Cookies de análisis",

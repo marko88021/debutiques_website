@@ -19,9 +19,17 @@
 
 body {
   margin: 0;
+  display: flex;
+  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background: linear-gradient(to bottom, #000, #111);
+  /* Global copy protection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 @layer base {
