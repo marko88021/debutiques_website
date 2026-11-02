@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Cookie-præferencer",
-    "description": "Vi bruger cookies til at forbedre din browsing-oplevelse, levere personaliseret indhold og analysere vores trafik. Ved at klikke på 'Accepter alle' giver du samtykke til vores brug af cookies.",
-    "simpleDescription": "Vi bruger cookies til at forbedre din oplevelse på vores hjemmeside. Du kan acceptere alle cookies eller tilpasse dine præferencer.",
+    "description": "Valgfrie analyse- og marketingcookies hjælper os med at forstå brugen af hjemmesiden. Du kan acceptere eller afvise dem. Tidsbestilling åbnes separat på Calendly, når du vælger linket.",
+    "simpleDescription": "Valgfrie analyse- og marketingcookies hjælper os med at forstå brugen af hjemmesiden. Du kan acceptere eller afvise dem. Tidsbestilling åbnes separat på Calendly, når du vælger linket.",
     "required": "Altid aktiv",
     "privacyPolicyLink": "Læs vores privatlivspolitik",
     "category": {
       "essential": {
         "title": "Nødvendige cookies",
-        "description": "Disse cookies er nødvendige for, at hjemmesiden kan fungere og kan ikke slås fra. De sættes normalt kun som reaktion på handlinger, du foretager."
+        "description": "Nødvendige for hjemmesidens grundlæggende funktioner og for at gemme dine cookieindstillinger."
       },
       "analytics": {
         "title": "Analyse-cookies",

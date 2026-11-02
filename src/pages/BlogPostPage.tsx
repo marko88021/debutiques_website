@@ -54,6 +54,10 @@ export default function BlogPostPage() {
         return;
       }
       setPost(postData);
+      document.title = `${postData.title} | Debutiques`;
+      document.querySelector('meta[name="description"]')?.setAttribute('content', postData.excerpt);
+      document.querySelector('meta[property="og:title"]')?.setAttribute('content', postData.title);
+      document.querySelector('meta[property="og:description"]')?.setAttribute('content', postData.excerpt);
 
       const allPosts = await getAllPosts(4);
       const filtered = allPosts

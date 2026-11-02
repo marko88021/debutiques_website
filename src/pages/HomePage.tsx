@@ -8,6 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { About } from '@/components/About';
 import { Hero } from '@/components/Hero';
+import { GalleryVideoPreview } from '@/components/GalleryVideoPreview';
+import { ProjectInquiry } from '@/components/ProjectInquiry';
+import { useDialogFocus } from '@/hooks/useDialogFocus';
 import { allGalleryItems as importedGalleryItems } from '@/utils/galleryCleanup';
 
 /* ===========================
@@ -192,14 +195,6 @@ const allGalleryImages: GalleryItem[] = importedGalleryItems.map(item => ({
   alt: item.title || `${item.category} image`
 }));
 
-const companyLogos = [
-  '/assets/white_RGB_secondary_logotype_rum21.png',
-  '/assets/product-campaign-t2.png',
-  '/assets/logo0.png',
-  '/assets/logo3.png',
-  '/assets/logo4.png',
-  '/assets/andlight.png',
-];
 
 // Story Reel
 const STORY_REEL_BASE = '/story%20reel';
@@ -244,12 +239,14 @@ function HomePage() {
   const [zoomedImage, setZoomedImage] = useState<GalleryItem | null>(null);
   const [currentZoomedImageIndex, setCurrentZoomedImageIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<'all' | 'product' | 'interior' | 'video'>('all');
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [reelPaused, setReelPaused] = useState(true);
 
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(isMobileMenuOpen, mobileMenuRef);
+  useDialogFocus(Boolean(zoomedImage), lightboxRef);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const socialProofRef = useRef<HTMLDivElement>(null);
@@ -273,7 +270,7 @@ function HomePage() {
     { label: t('navigation.about'), ref: aboutRef, id: 'about' },
     { label: 'Blog', ref: null, id: 'blog', link: '/blog' },
     { label: 'Pricing', ref: null, id: 'pricing', link: '/pricing' },
-    { label: t('navigation.contact'), ref: footerRef, id: 'footer' },
+    { label: t('navigation.contact'), ref: scheduleRef, id: 'schedule' },
   ];
 
   const services = [
@@ -284,12 +281,6 @@ function HomePage() {
     { icon: <Home className="h-8 w-8" />, title: t('services.interiorShots.title'), description: t('services.interiorShots.description') },
   ];
 
-  const impactStats: Array<{ value: string; caption: string }> = [
-    { value: '72%', caption: 'Lower visual content production cost vs. traditional photo shoots' },
-    { value: '18%', caption: 'Higher return (ROI)' },
-    { value: '38%', caption: 'Increase in conversion rates' },
-    { value: '21%', caption: 'Higher average order value (AOV)' },
-  ];
 
   const faqItems = [
     { question: t('faq.items.renderingProcess.question'), answer: t('faq.items.renderingProcess.answer') },
@@ -381,74 +372,12 @@ function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Hero video boot
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return;
-
-    const handleCanPlay = () => { setVideoLoaded(true); setVideoError(false); };
-    const handleError = () => { setVideoError(true); setVideoLoaded(false); };
-    const handleLoadedData = () => setVideoLoaded(true);
-
-    video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('error', handleError);
-    video.addEventListener('loadeddata', handleLoadedData);
-
-    const playVideo = async () => {
-      try {
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise !== undefined) await playPromise;
-      } catch (err) {
-        console.warn('Autoplay prevented or failed, waiting for user interaction to resume.', err);
-        setVideoLoaded(false);
-      }
-    };
-
-    try {
-      video.load();
-    } catch (err) {
-      console.error('Video failed to load', err);
-      setVideoError(true);
-      return;
-    }
-
-    const timer = setTimeout(() => playVideo(), 100);
-    return () => {
-      clearTimeout(timer);
-      video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('error', handleError);
-      video.removeEventListener('loadeddata', handleLoadedData);
-    };
-  }, []);
-
-  // Unmute/play after first interaction (mobile)
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      const video = heroVideoRef.current;
-      if (video && !videoError) {
-        if (video.paused) {
-          video
-            .play()
-            .then(() => setVideoLoaded(true))
-            .catch((err) => console.warn('Video playback still blocked after interaction.', err));
-        }
-      }
-    };
-    document.addEventListener('click', handleUserInteraction, { once: true });
-    document.addEventListener('touchstart', handleUserInteraction, { once: true });
-    return () => {
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-    };
-  }, [videoError]);
-
   const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
-    sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    sectionRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     setIsMobileMenuOpen(false);
   };
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const toggleFaq = (index: number) => setOpenFaqIndex(openFaqIndex === index ? null : index);
 
@@ -459,31 +388,34 @@ function HomePage() {
   };
 
   const showNextImage = () => {
-    if (currentZoomedImageIndex === null) return;
-    const nextIndex = (currentZoomedImageIndex + 1) % allGalleryImages.length;
-    const nextImage = allGalleryImages[nextIndex];
+    if (!zoomedImage) return;
+    const items = activeFilter === 'all' ? allGalleryImages : allGalleryImages.filter(item => item.category === activeFilter);
+    const nextImage = items[(items.findIndex(item => item.id === zoomedImage.id) + 1) % items.length];
+    const nextIndex = allGalleryImages.findIndex(item => item.id === nextImage.id);
     setZoomedImage(nextImage);
     setCurrentZoomedImageIndex(nextIndex);
   };
 
   const showPreviousImage = () => {
-    if (currentZoomedImageIndex === null) return;
-    const prevIndex = currentZoomedImageIndex === 0 ? allGalleryImages.length - 1 : currentZoomedImageIndex - 1;
-    const prevImage = allGalleryImages[prevIndex];
+    if (!zoomedImage) return;
+    const items = activeFilter === 'all' ? allGalleryImages : allGalleryImages.filter(item => item.category === activeFilter);
+    const prevImage = items[(items.findIndex(item => item.id === zoomedImage.id) - 1 + items.length) % items.length];
+    const prevIndex = allGalleryImages.findIndex(item => item.id === prevImage.id);
     setZoomedImage(prevImage);
     setCurrentZoomedImageIndex(prevIndex);
   };
 
   const filteredImages = activeFilter === 'all' ? allGalleryImages : allGalleryImages.filter((image) => image.category === activeFilter);
 
-  const selectedWork = allGalleryImages.slice(0, 9);
+  const selectedWork = ['product-1', 'interior-11', 'product-15', 'interior-1', 'product-7', 'interior-15'].map(id => allGalleryImages.find(item => item.id === id)).filter((item): item is GalleryItem => Boolean(item));
 
 
 
   return (
-    <div className="bg-black text-white">
+    <div className="furniture-home bg-black text-white">
+      <a className="skip-link" href="#main-content">Skip to content</a>
       {/* NAV */}
-      <nav className="fixed top-0 left-0 w-full z-[70] bg-black/80 backdrop-blur-sm">
+      <nav aria-label="Main navigation" className="site-navigation fixed top-0 left-0 w-full z-[70] bg-black/80 backdrop-blur-sm">
         <div className="mx-auto max-w-[1600px] px-4 md:px-6">
           <div className="grid grid-cols-[auto,1fr,auto] items-center gap-4 md:gap-6 py-4 md:py-5">
             {/* LEFT: Logo */}
@@ -508,14 +440,14 @@ function HomePage() {
             </div>
 
             {/* CENTER: Primary nav */}
-            <div className="hidden md:flex justify-center min-w-0">
-              <div className="flex items-center gap-6 lg:gap-8 xl:gap-10 2xl:gap-12">
+            <div className="hidden xl:flex justify-center min-w-0">
+              <div className="flex items-center gap-4">
                 {navigationItems.map((item) => (
                   item.link ? (
                     <Link
                       key={item.label}
                       to={item.link}
-                      className="whitespace-nowrap text-xs uppercase tracking-super transition-colors hover:text-white focus:ring-2 focus:ring-emerald-400 focus:outline-none text-neutral-500"
+                      className="whitespace-nowrap text-xs uppercase tracking-widest transition-colors hover:text-white focus:ring-2 focus:ring-emerald-400 focus:outline-none text-neutral-300"
                     >
                       {item.label}
                     </Link>
@@ -523,8 +455,8 @@ function HomePage() {
                     <button
                       key={item.label}
                       onClick={() => item.ref && scrollToSection(item.ref)}
-                      className={`whitespace-nowrap text-xs uppercase tracking-super transition-colors hover:text-white focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
-                        activeSection === item.id ? 'text-white' : 'text-neutral-500'
+                      className={`whitespace-nowrap text-xs uppercase tracking-widest transition-colors hover:text-white focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
+                        activeSection === item.id ? 'text-white' : 'text-neutral-300'
                       }`}
                     >
                       {item.label}
@@ -535,7 +467,7 @@ function HomePage() {
             </div>
 
             {/* RIGHT */}
-            <div className="ml-auto hidden md:flex items-center gap-3 lg:gap-5">
+            <div className="ml-auto hidden xl:flex items-center gap-3 lg:gap-5">
               <a
                 href="mailto:info@debutiques.com"
                 className="text-neutral-500 hover:text-white focus:ring-2 focus:ring-emerald-400 focus:outline-none transition-colors p-2"
@@ -561,7 +493,7 @@ function HomePage() {
             </div>
 
             {/* RIGHT (mobile) */}
-            <div className="ml-auto flex items-center gap-4 md:hidden">
+            <div className="ml-auto flex items-center gap-4 xl:hidden">
               <LanguageSwitcher />
               <button
                 ref={menuButtonRef}
@@ -579,14 +511,14 @@ function HomePage() {
         </div>
 
         {/* MOBILE MENU */}
-        <div className={`fixed inset-0 z-[9999] md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`} aria-hidden={!isMobileMenuOpen}>
+        <div className={`fixed inset-0 z-[9999] xl:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`} aria-hidden={!isMobileMenuOpen}>
           <div
             ref={mobileMenuRef}
             id="mobile-menu"
             className="min-h-screen w-full bg-black flex flex-col overflow-y-auto pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="mobile-menu-toggle"
+            aria-label="Navigation menu"
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
               <span className="text-xs uppercase tracking-widest text-neutral-400">Menu</span>
@@ -604,12 +536,12 @@ function HomePage() {
                   <li key={item.label}>
                     {item.link ? (
                       <Link to={item.link} className="w-full flex items-baseline gap-3 py-4 focus:ring-2 focus:ring-emerald-400 focus:outline-none">
-                        <span className="w-8 shrink-0 text-sm text-neutral-500">{(index + 1).toString().padStart(2, '0')}</span>
+                        <span className="w-8 shrink-0 text-sm text-neutral-300">{(index + 1).toString().padStart(2, '0')}</span>
                         <span className="text-2xl leading-none font-light tracking-wide text-white">{item.label}</span>
                       </Link>
                     ) : (
                       <button onClick={() => item.ref && scrollToSection(item.ref)} className="w-full flex items-baseline gap-3 py-4 focus:ring-2 focus:ring-emerald-400 focus:outline-none">
-                        <span className="w-8 shrink-0 text-sm text-neutral-500">{(index + 1).toString().padStart(2, '0')}</span>
+                        <span className="w-8 shrink-0 text-sm text-neutral-300">{(index + 1).toString().padStart(2, '0')}</span>
                         <span className="text-2xl leading-none font-light tracking-wide text-white">{item.label}</span>
                       </button>
                     )}
@@ -640,84 +572,21 @@ function HomePage() {
         </div>
       </nav>
 
-      {/* HERO */}
-      <Hero
-        heroRef={heroRef}
-        heroVideoRef={heroVideoRef}
-        videoError={videoError}
-        setVideoError={setVideoError}
-        videoLoaded={videoLoaded}
-        scheduleRef={scheduleRef}
-        showcaseRef={showcaseRef}
-        scrollToSection={scrollToSection}
-      />
+      <main id="main-content" tabIndex={-1}>
+      <Hero heroRef={heroRef} scheduleRef={scheduleRef} showcaseRef={selectedWorkRef} scrollToSection={scrollToSection} />
 
-      {/* SOCIAL PROOF */}
-      <section id="social-proof" ref={socialProofRef} className="py-12 md:py-14 bg-neutral-950">
-        <div className="container mx-auto px-6 md:px-10">
-          <div className="text-center overflow-hidden">
-            <p className="text-[11px] md:text-xs uppercase tracking-[0.18em] text-neutral-400 mb-4">
-              {t('socialProof.trustedBy')}
-            </p>
-            <div className="relative w-full">
-              <div className="flex overflow-hidden">
-                <div className="flex animate-scroll [animation-duration:45s] md:[animation-duration:30s]">
-                  {companyLogos.map((logo, index) => (
-                    <div key={`logo-1-${index}`} className="logo-container mx-8 sm:mx-10">
-                      <img 
-                        src={logo} 
-                        alt={`Partner company logo ${index + 1}`} 
-                        className="logo-image h-8 md:h-10 w-auto opacity-80 hover:opacity-100" 
-                        loading="lazy" 
-                      />
-                    </div>
-                  ))}
-                  {companyLogos.map((logo, index) => (
-                    <div key={`logo-2-${index}`} className="logo-container mx-8 sm:mx-10">
-                      <img 
-                        src={logo} 
-                        alt={`Partner company logo ${index + 1}`} 
-                        className="logo-image h-8 md:h-10 w-auto opacity-80 hover:opacity-100" 
-                        loading="lazy" 
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center">
-            <div>
-              <p className="text-3xl md:text-4xl font-light leading-none mb-1">50+</p>
-              <p className="mt-1 text-neutral-400 text-[11px] md:text-xs uppercase tracking-[0.18em]">
-                {t('socialProof.productsVisualized')}
-              </p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-4xl font-light leading-none mb-1">10,000+</p>
-              <p className="mt-1 text-neutral-400 text-[11px] md:text-xs uppercase tracking-[0.18em]">
-                {t('socialProof.rendersDelivered')}
-              </p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-4xl font-light leading-none mb-1">Global</p>
-              <p className="mt-1 text-neutral-400 text-[11px] md:text-xs uppercase tracking-[0.18em]">
-                {t('socialProof.catalogDistribution')}
-              </p>
-            </div>
-          </div>
-        </div>
+      <section id="social-proof" ref={socialProofRef} className="capability-strip" aria-label="Furniture visualization services">
+        <span>Product & material studies</span><span>Interior storytelling</span><span>Motion & assembly</span>
       </section>
 
-      {/* SELECTED WORK (3×3) */}
+      {/* Selected real portfolio work */}
       <section id="selected-work" ref={selectedWorkRef} className="py-12 bg-black">
         <div className="container mx-auto px-6 md:px-12">
           <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-center">Selected Work</h2>
         </div>
 
-        <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-8">
-          <div className="grid grid-cols-3 gap-px bg-neutral-900">
+        <div className="selected-work-grid container mx-auto px-6 md:px-12 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {selectedWork.map((item) => (
               <button
                 key={item.id}
@@ -733,7 +602,7 @@ function HomePage() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
-                <span className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                <span className="work-caption">{item.title}<ChevronRight className="h-4 w-4" aria-hidden="true" /></span>
               </button>
             ))}
           </div>
@@ -751,26 +620,6 @@ function HomePage() {
       {/* WHY CHOOSE US */}
       <section id="problem" ref={problemRef} className="bg-neutral-950">
         <WhyChooseUsTwoCol onScheduleClick={() => scrollToSection(scheduleRef)} />
-      </section>
-
-      {/* IMPACT */}
-      <section id="impact" className="py-24 bg-black">
-        <div className="container mx-auto px-6 md:px-12">
-          <h2 className="text-4xl font-light mb-16 tracking-tight text-center">Boost Sales with Powerful Imagery</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6">
-            {impactStats.map((item, idx) => (
-              <div key={idx} className={`text-center md:text-left px-0 md:px-6 ${idx > 0 ? 'md:border-l md:border-neutral-800' : ''}`}>
-                <p className="text-5xl font-light mb-3">{item.value}</p>
-                <p className="text-neutral-400 font-light">{item.caption}</p>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-8 text-center text-xs text-neutral-500">
-            Benchmarks based on aggregated data from our clients' data science teams and industry data; results vary by product and channel.
-          </p>
-        </div>
       </section>
 
       {/* SERVICES */}
@@ -797,7 +646,8 @@ function HomePage() {
           <div className="flex justify-center mb-12 px-4">
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 bg-neutral-900/50 p-2 rounded-lg w-full">
               <button
-                onClick={() => setActiveFilter('all')}
+                onClick={() => { setVisibleCount(12); setActiveFilter('all'); }}
+                aria-pressed={activeFilter === 'all'}
                 className={`px-3 sm:px-6 py-2 text-xs sm:text-sm uppercase tracking-widest transition-all whitespace-nowrap focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
                   activeFilter === 'all' ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
                 }`}
@@ -805,7 +655,8 @@ function HomePage() {
                 {t('showcase.filters.allWork')}
               </button>
               <button
-                onClick={() => setActiveFilter('product')}
+                onClick={() => { setVisibleCount(12); setActiveFilter('product'); }}
+                aria-pressed={activeFilter === 'product'}
                 className={`px-3 sm:px-6 py-2 text-xs sm:text-sm uppercase tracking-widest transition-all whitespace-nowrap focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
                   activeFilter === 'product' ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
                 }`}
@@ -813,7 +664,8 @@ function HomePage() {
                 {t('showcase.filters.productRenders')}
               </button>
               <button
-                onClick={() => setActiveFilter('interior')}
+                onClick={() => { setVisibleCount(12); setActiveFilter('interior'); }}
+                aria-pressed={activeFilter === 'interior'}
                 className={`px-3 sm:px-6 py-2 text-xs sm:text-sm uppercase tracking-widest transition-all whitespace-nowrap focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
                   activeFilter === 'interior' ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
                 }`}
@@ -821,7 +673,8 @@ function HomePage() {
                 {t('showcase.filters.interiorScenes')}
               </button>
               <button
-                onClick={() => setActiveFilter('video')}
+                onClick={() => { setVisibleCount(12); setActiveFilter('video'); }}
+                aria-pressed={activeFilter === 'video'}
                 className={`px-3 sm:px-6 py-2 text-xs sm:text-sm uppercase tracking-widest transition-all whitespace-nowrap focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
                   activeFilter === 'video' ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
                 }`}
@@ -833,23 +686,17 @@ function HomePage() {
 
           {/* 6×6 SQUARE GRID */}
           <div className="mx-auto max-w-[1600px]">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {filteredImages.slice(0, 36).map((item) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredImages.slice(0, visibleCount).map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleImageClick(item)}
+                  aria-label={`View ${item.title}`}
                   className="group relative w-full overflow-hidden rounded-sm bg-neutral-900 focus:ring-2 focus:ring-emerald-400 focus:outline-none"
                 >
                   <div className="relative w-full pt-[100%]">
                     {item.type === 'video' ? (
-                      <video
-                        src={item.src}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                      />
+                      <GalleryVideoPreview src={item.src} />
                     ) : (
                       <img
                         src={item.src}
@@ -859,15 +706,16 @@ function HomePage() {
                       />
                     )}
                   </div>
-                  <span className="pointer-events-none absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/30" />
+                  <span className="work-caption">{item.type === 'video' && <Video className="h-4 w-4" aria-hidden="true" />}{item.title}<ChevronRight className="h-4 w-4" aria-hidden="true" /></span>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-neutral-400 text-sm">
-              {t('showcase.showingResults', { count: filteredImages.length, total: allGalleryImages.length })}
+            {visibleCount < filteredImages.length && <button className="editorial-button mb-5" onClick={() => setVisibleCount(count => count + 12)}>Show more work</button>}
+            <p className="text-neutral-400 text-sm" aria-live="polite">
+              {t('showcase.showingResults', { count: Math.min(visibleCount, filteredImages.length), total: filteredImages.length })}
             </p>
           </div>
         </div>
@@ -876,7 +724,7 @@ function HomePage() {
       {/* ZOOM MODAL */}
       {zoomedImage && (
         <div className="zoom-modal-container" onClick={() => { setZoomedImage(null); setCurrentZoomedImageIndex(null); }} style={{ animation: 'fadeIn 0.3s ease-out' }}>
-          <div className="zoom-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div ref={lightboxRef} role="dialog" aria-modal="true" aria-label={zoomedImage.title || 'Portfolio detail'} tabIndex={-1} className="zoom-modal-content" onClick={(e) => e.stopPropagation()}>
             {filteredImages.length > 1 && (
               <>
                 <button 
@@ -952,14 +800,14 @@ function HomePage() {
           <div className="max-w-3xl mx-auto">
             {faqItems.map((item, index) => (
               <div key={index} className="mb-6 border-b border-neutral-800 pb-6">
-                <button onClick={() => toggleFaq(index)} className="flex justify-between items-center w-full text-left focus:ring-2 focus:ring-emerald-400 focus:outline-none">
+                <button aria-expanded={openFaqIndex === index} aria-controls={`faq-answer-${index}`} onClick={() => toggleFaq(index)} className="flex justify-between items-center w-full text-left focus:ring-2 focus:ring-emerald-400 focus:outline-none">
                   <h3 className="text-xl font-light">{item.question}</h3>
                   <div className="flex-shrink-0 ml-4">
                     {openFaqIndex === index ? <Minus className="h-5 w-5 text-neutral-400" /> : <Plus className="h-5 w-5 text-neutral-400" />}
                   </div>
                 </button>
                 {openFaqIndex === index && (
-                  <div className="mt-4 text-neutral-400 font-light whitespace-pre-line text-left">{item.answer}</div>
+                  <div id={`faq-answer-${index}`} className="mt-4 text-neutral-400 font-light whitespace-pre-line text-left">{item.answer}</div>
                 )}
               </div>
             ))}
@@ -972,25 +820,8 @@ function HomePage() {
         <About />
       </div>
 
-      {/* SCHEDULE */}
-      <section id="schedule" ref={scheduleRef} className="bg-neutral-950">
-        <div className="px-6 md:px-4 pt-24">
-          <h2 className="text-4xl font-light mb-4 tracking-tight text-center text-white">{t('schedule.title')}</h2>
-          <p className="text-xl text-neutral-300 mb-8 font-light text-center max-w-2xl mx-auto">
-            {t('schedule.description')}
-          </p>
-        </div>
-        <div className="px-6 md:px-4 pb-6">
-          <div className="max-w-4xl mx-auto">
-            {/* Calendly inline widget begin */}
-            <div 
-              className="calendly-inline-widget"
-              data-url="https://calendly.com/debutiques/meeting"
-              style={{ minWidth: '320px', height: '700px' }}
-            ></div>
-            {/* Calendly inline widget end */}
-          </div>
-        </div>
+      <section id="schedule" ref={scheduleRef} className="inquiry-section">
+        <ProjectInquiry />
       </section>
 
       {/* STORY REEL */}
@@ -999,12 +830,13 @@ function HomePage() {
           <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-center mb-8">
             Market the Experience, Not Just the Item
           </h2>
+          <button className="editorial-link" aria-pressed={!reelPaused} onClick={() => setReelPaused(value => !value)}>{reelPaused ? 'Play image reel' : 'Pause image reel'}</button>
         </div>
 
-        <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden">
+        <div className="relative w-full overflow-hidden">
           <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent" />
-          <div className="reel-track" style={{ animationDuration: '50s' }}>
+          <div className="reel-track" style={{ animationDuration: '50s', animationPlayState: reelPaused ? 'paused' : 'running' }}>
             {storyReelImages.concat(storyReelImages).map((item, i) => (
               <div key={i} className="shrink-0" style={{ width: 'clamp(150px, 18vw, 280px)' }}>
                 <div className="aspect-[2/3] rounded-sm overflow-hidden bg-neutral-900 relative">
@@ -1030,6 +862,7 @@ function HomePage() {
         />
       </section>
 
+      </main>
       {/* FOOTER */}
       <footer ref={footerRef} className="py-12 bg-neutral-950 border-t border-neutral-900">
         <div className="container mx-auto px-6 md:px-12">
@@ -1097,6 +930,8 @@ function HomePage() {
 
         <button
           onClick={scrollToTop}
+          aria-label="Back to top"
+          tabIndex={showBackToTop ? 0 : -1}
           className={`fixed bottom-8 right-8 bg-white text-black p-3 rounded-full shadow-lg transition-opacity duration-300 hover:bg-neutral-200 focus:ring-2 focus:ring-emerald-400 focus:outline-none ${
             showBackToTop ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
@@ -1109,3 +944,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

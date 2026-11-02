@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Préférences de cookies",
-    "description": "Nous utilisons des cookies pour améliorer votre expérience de navigation, servir du contenu personnalisé et analyser notre trafic. En cliquant sur 'Tout accepter', vous consentez à notre utilisation des cookies.",
-    "simpleDescription": "Nous utilisons des cookies pour améliorer votre expérience sur notre site web. Vous pouvez accepter tous les cookies ou personnaliser vos préférences.",
+    "description": "Les cookies facultatifs d’analyse et de marketing nous aident à comprendre l’utilisation du site. Vous pouvez les accepter ou les refuser. La réservation s’ouvre séparément sur Calendly uniquement lorsque vous sélectionnez le lien.",
+    "simpleDescription": "Les cookies facultatifs d’analyse et de marketing nous aident à comprendre l’utilisation du site. Vous pouvez les accepter ou les refuser. La réservation s’ouvre séparément sur Calendly uniquement lorsque vous sélectionnez le lien.",
     "required": "Toujours actif",
     "privacyPolicyLink": "Lire notre Politique de Confidentialité",
     "category": {
       "essential": {
         "title": "Cookies essentiels",
-        "description": "Ces cookies sont nécessaires au fonctionnement du site web et ne peuvent pas être désactivés. Ils ne sont généralement définis qu'en réponse à des actions que vous effectuez."
+        "description": "Nécessaires aux fonctions de base du site et à l’enregistrement de vos préférences de cookies."
       },
       "analytics": {
         "title": "Cookies d'analyse",

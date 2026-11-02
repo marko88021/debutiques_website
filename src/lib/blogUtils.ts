@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, isSupabaseConfigured } from './supabase';
 
 export interface BlogPost {
   id: string;
@@ -66,6 +66,7 @@ const mapSupabasePost = (post: BlogPostRow): BlogPost => {
 };
 
 export async function getAllPosts(limit?: number) {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getAllPosts(limit);
   if (!supabase) {
     return [];
   }
@@ -97,6 +98,7 @@ export async function getAllPosts(limit?: number) {
 }
 
 export async function getPostBySlug(slug: string) {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getPostBySlug(slug);
   const { data, error } = await supabase
     .from('blog_posts')
     .select(`
@@ -120,6 +122,7 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getPostsByCategory(categorySlug: string, limit?: number) {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getPostsByCategory(categorySlug, limit);
   const { data: category } = await supabase
     .from('blog_categories')
     .select('id')
@@ -156,6 +159,7 @@ export async function getPostsByCategory(categorySlug: string, limit?: number) {
 }
 
 export async function getPostsByTag(tagSlug: string, limit?: number) {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getPostsByTag(tagSlug, limit);
   const { data: tag } = await supabase
     .from('blog_tags')
     .select('id')
@@ -201,6 +205,7 @@ export async function getPostsByTag(tagSlug: string, limit?: number) {
 }
 
 export async function searchPosts(searchTerm: string) {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).searchPosts(searchTerm);
   const sanitizedTerm = sanitizeSearchTerm(searchTerm);
   if (!sanitizedTerm) {
     return [];
@@ -235,6 +240,7 @@ export async function searchPosts(searchTerm: string) {
 }
 
 export async function getAllCategories() {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getAllCategories();
   const { data, error } = await supabase
     .from('blog_categories')
     .select('*')
@@ -249,6 +255,7 @@ export async function getAllCategories() {
 }
 
 export async function getAllTags() {
+  if (!isSupabaseConfigured) return (await import('./staticBlogUtils')).getAllTags();
   const { data, error } = await supabase
     .from('blog_tags')
     .select('*')

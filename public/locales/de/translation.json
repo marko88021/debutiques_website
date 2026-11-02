@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Cookie-Einstellungen",
-    "description": "Wir verwenden Cookies, um Ihr Browsing-Erlebnis zu verbessern, personalisierte Inhalte bereitzustellen und unseren Traffic zu analysieren. Durch Klicken auf 'Alle akzeptieren' stimmen Sie der Verwendung von Cookies zu.",
-    "simpleDescription": "Wir verwenden Cookies, um Ihre Erfahrung auf unserer Website zu verbessern. Sie können alle Cookies akzeptieren oder Ihre Einstellungen anpassen.",
+    "description": "Optionale Analyse- und Marketing-Cookies helfen uns, die Nutzung der Website zu verstehen. Sie können diese akzeptieren oder ablehnen. Die Terminbuchung öffnet sich nur über den entsprechenden Link separat bei Calendly.",
+    "simpleDescription": "Optionale Analyse- und Marketing-Cookies helfen uns, die Nutzung der Website zu verstehen. Sie können diese akzeptieren oder ablehnen. Die Terminbuchung öffnet sich nur über den entsprechenden Link separat bei Calendly.",
     "required": "Immer aktiv",
     "privacyPolicyLink": "Lesen Sie unsere Datenschutzerklärung",
     "category": {
       "essential": {
         "title": "Notwendige Cookies",
-        "description": "Diese Cookies sind für das Funktionieren der Website erforderlich und können nicht ausgeschaltet werden. Sie werden normalerweise nur als Reaktion auf Ihre Aktionen gesetzt."
+        "description": "Erforderlich für grundlegende Website-Funktionen und das Speichern Ihrer Cookie-Einstellungen."
       },
       "analytics": {
         "title": "Analyse-Cookies",

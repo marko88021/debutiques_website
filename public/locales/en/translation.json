@@ -9,10 +9,10 @@
     "contact": "Contact"
   },
   "hero": {
-    "title": "TRANSFORM YOUR\nFURNITURE BUSINESS\nWITH 3D VISUALS\nTHAT SELL",
-    "subtitle": "We create stunning 3D visuals that help you sell more furniture, attract more customers, and stand out from the competition. We are not just renderers — we are visual storytellers for the furniture world.",
-    "cta": "Get a Free Project Quote",
-    "viewShowcase": "View Our Showcase"
+    "title": "Your furniture.\nBeautifully realised.",
+    "subtitle": "Considered 3D imagery for Scandinavian and European furniture brands. From the first material study to a complete collection, we make every detail visible.",
+    "cta": "Discuss your project",
+    "viewShowcase": "Explore selected work"
   },
   "problem": {
     "challenges": {
@@ -96,7 +96,7 @@
       "interior": "Interior",
       "video": "Video"
     },
-    "showingResults": "Showing {{count}} of {{total}} projects"
+    "showingResults": "Showing {{count}} of {{total}} portfolio items"
   },
   "process": {
     "title": "How It Works",
@@ -192,14 +192,14 @@
   },
   "cookieConsent": {
     "title": "Cookie Preferences",
-    "description": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Our appointment scheduling service (Calendly) is classified as essential and runs regardless of your cookie preferences. By clicking 'Accept All', you consent to our use of cookies.",
-    "simpleDescription": "We use cookies to improve your experience on our website. Our appointment booking system (Calendly) uses cookies and is always active as it's essential for our service. You can accept all cookies or customize your preferences.",
+    "description": "Optional analytics and marketing cookies help us understand site usage. You can accept or decline them. Appointment booking opens separately on Calendly only when you choose the link.",
+    "simpleDescription": "Optional analytics and marketing cookies help us understand site usage. You can accept or decline them. Appointment booking opens separately on Calendly only when you choose the link.",
     "required": "Always Active",
     "privacyPolicyLink": "Read our Privacy Policy",
     "category": {
       "essential": {
         "title": "Essential Cookies",
-        "description": "These cookies are necessary for the website to function and cannot be switched off. This includes our appointment scheduling service (Calendly) which is essential for booking meetings with our team."
+        "description": "Required for basic website functionality and saving your cookie preferences."
       },
       "analytics": {
         "title": "Analytics Cookies",

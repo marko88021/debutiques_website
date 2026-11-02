@@ -164,9 +164,9 @@ export function PrivacyPolicy() {
           </div>
 
           <div className="border border-neutral-800 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-2">Calendly (Essential Service)</h4>
+            <h4 className="text-white font-semibold mb-2">Calendly (Optional External Booking)</h4>
             <p className="text-gray-300 text-sm mb-2">
-              <strong>Purpose:</strong> Appointment scheduling and meeting coordination - classified as essential for core business functionality.
+              <strong>Purpose:</strong> Appointment scheduling and meeting coordination via an optional external link.
             </p>
             <p className="text-gray-300 text-sm mb-2">
               <strong>Data Collected:</strong> Name, email address, meeting preferences, timezone information.
@@ -181,7 +181,7 @@ export function PrivacyPolicy() {
               <strong>Privacy Policy:</strong> <a href="https://calendly.com/privacy" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-gray-300">https://calendly.com/privacy</a>
             </p>
             <p className="text-gray-300 text-sm">
-              <strong>Note:</strong> Calendly is loaded automatically as it is essential for booking meetings with our team. The widget uses cookies and runs regardless of your cookie preferences for non-essential services.
+              <strong>Note:</strong> Calendly opens only when you choose the booking link. No Calendly widget is loaded automatically on this website. Calendly manages data and cookies on its own website.
             </p>
           </div>
 
@@ -223,7 +223,7 @@ export function PrivacyPolicy() {
 
         <h3 className="text-lg font-semibold text-white mb-3">Cookie Categories</h3>
         <ul className="list-disc pl-6 text-gray-300 mb-8">
-          <li><strong>Essential Cookies:</strong> Required for basic site functionality and core services, including our appointment scheduling system (Calendly). These cannot be disabled.</li>
+          <li><strong>Essential Cookies:</strong> Required for basic site functionality. Optional analytics and marketing can be declined. Calendly is accessed only through an external booking link.</li>
           <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site (Google Analytics, Microsoft Clarity).</li>
           <li><strong>Marketing Cookies:</strong> Used to deliver relevant advertisements and track campaign performance (Google Tag Manager).</li>
         </ul>

@@ -190,14 +190,14 @@
   },
   "cookieConsent": {
     "title": "Cookie-voorkeuren",
-    "description": "We gebruiken cookies om uw browse-ervaring te verbeteren, gepersonaliseerde content te leveren en ons verkeer te analyseren. Door op 'Alles accepteren' te klikken, stemt u in met ons gebruik van cookies.",
-    "simpleDescription": "We gebruiken cookies om uw ervaring op onze website te verbeteren. U kunt alle cookies accepteren of uw voorkeuren aanpassen.",
+    "description": "Optionele analyse- en marketingcookies helpen ons het gebruik van de website te begrijpen. U kunt ze accepteren of weigeren. Een afspraak boeken opent pas apart op Calendly wanneer u de link kiest.",
+    "simpleDescription": "Optionele analyse- en marketingcookies helpen ons het gebruik van de website te begrijpen. U kunt ze accepteren of weigeren. Een afspraak boeken opent pas apart op Calendly wanneer u de link kiest.",
     "required": "Altijd actief",
     "privacyPolicyLink": "Lees ons privacybeleid",
     "category": {
       "essential": {
         "title": "Essentiële cookies",
-        "description": "Deze cookies zijn noodzakelijk voor het functioneren van de website en kunnen niet worden uitgeschakeld. Ze worden meestal alleen ingesteld als reactie op acties die u onderneemt."
+        "description": "Nodig voor de basisfuncties van de website en het opslaan van uw cookievoorkeuren."
       },
       "analytics": {
         "title": "Analyse-cookies",
