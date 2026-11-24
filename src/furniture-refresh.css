@@ -66,9 +66,12 @@ body { display: block; min-width: 320px; background: #111210; color: #efeee8; fo
 .assembly-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .assembly-card h2 { font-size: clamp(21px, 3vw, 30px); font-weight: 400; }
 .assembly-card-heading span { color: #c6c9bf; font-variant-numeric: tabular-nums; }
-.assembly-card video { display: block; width: 100%; height: auto; aspect-ratio: 1; background: #eae7df; }
+.assembly-card video { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; background: #eae7df; }
 .assembly-card p { margin-top: 12px; color: #c6c9bf; }
 .assembly-contact { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid #ffffff20; }
+@media (min-width: 1000px) {
+  .assembly-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 680px) {
   .assembly-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
 }

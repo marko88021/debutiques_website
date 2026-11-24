@@ -13,6 +13,12 @@ const films = [
     duration: '1:23',
     description: 'Frame assembly, door fitting and how to reverse the door opening.',
   },
+  {
+    id: 'mediabench',
+    title: 'Mediabench',
+    duration: '1:02',
+    description: 'How the frame, panels and doors fit together on a low media cabinet.',
+  },
 ];
 
 export default function AssemblyPage() {
@@ -24,7 +30,7 @@ export default function AssemblyPage() {
       </header>
       <main className="assembly-content">
         <h1>Assembly animations</h1>
-        <p className="assembly-intro">See how each piece comes together, from the first fastener to the finished cabinet.</p>
+        <p className="assembly-intro">See how each piece comes together, from the first fastener to the finished piece.</p>
         <div className="assembly-grid">
           {films.map(({ id, title, duration, description }) => (
             <article key={id} className="assembly-card">
