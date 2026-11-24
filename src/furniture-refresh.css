@@ -26,8 +26,8 @@ body { display: block; min-width: 320px; background: #111210; color: #efeee8; fo
 .editorial-link { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 44px; font-size: 14px; text-decoration: underline; text-underline-offset: 5px; }
 .hero-note { font-size: 11px; margin-top: 48px; color: #5b6158; }
 .hero-figure { margin: 0; position: relative; overflow: hidden; min-height: 600px; aspect-ratio: 1 / 1; background: #bdb9af; }
-.hero-figure img { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: center; transform: translateX(-7%) scale(1.16); }
-.hero-figure figcaption { position: absolute; bottom: 0; left: 0; right: 0; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; color: white; background: #172016d9; padding: 16px 25px; font-size: 10px; letter-spacing: .06em; }
+.hero-film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-film-toggle { position: absolute; right: 20px; bottom: 20px; display: grid; place-items: center; width: 44px; height: 44px; color: white; background: #172016e8; border-radius: 50%; }
 .capability-strip { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; padding: 25px max(24px,calc((100% - 1552px) / 2)); background: #20271f; color: #d9dfd3; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
 .furniture-home #selected-work { background: #111210; padding-block: 80px; }
 .furniture-home #selected-work h2, .furniture-home #showcase h2 { text-align: left; }
@@ -56,6 +56,22 @@ body { display: block; min-width: 320px; background: #111210; color: #efeee8; fo
 .draft-actions { display: flex; flex-wrap: wrap; gap: 20px; }
 .pricing-page { background: #111210; color: #eeede5; min-height: 100vh; }
 .simple-header { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; padding: 26px max(24px,5vw); border-bottom: 1px solid #ffffff20; font-size: 14px; }
+.assembly-page { min-height: 100vh; background: #111210; color: #eeede5; }
+.assembly-header { padding-inline: max(24px, calc((100% - 1180px) / 2)); align-items: center; }
+.assembly-header a:first-child { font-weight: 600; letter-spacing: .07em; }
+.assembly-content { max-width: 1240px; margin-inline: auto; padding: clamp(44px, 6vw, 84px) clamp(20px, 4vw, 40px); }
+.assembly-content h1 { font-size: clamp(38px, 6vw, 76px); line-height: 1.05; letter-spacing: -.045em; font-weight: 400; }
+.assembly-intro { margin-top: 18px; max-width: 54ch; color: #c6c9bf; }
+.assembly-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); margin-top: 36px; }
+.assembly-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.assembly-card h2 { font-size: clamp(21px, 3vw, 30px); font-weight: 400; }
+.assembly-card-heading span { color: #c6c9bf; font-variant-numeric: tabular-nums; }
+.assembly-card video { display: block; width: 100%; height: auto; aspect-ratio: 1; background: #eae7df; }
+.assembly-card p { margin-top: 12px; color: #c6c9bf; }
+.assembly-contact { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid #ffffff20; }
+@media (max-width: 680px) {
+  .assembly-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
 .pricing-intro { max-width: 1400px; margin: auto; padding: 80px max(24px,5vw); }
 .pricing-intro h1 { font-size: clamp(36px,5vw,72px); font-weight: 400; line-height: 1.05; letter-spacing: -.04em; margin: 25px 0; }
 .pricing-intro > p { max-width: 630px; line-height: 1.8; color: #c6c9bf; }
@@ -84,7 +100,6 @@ body { display: block; min-width: 320px; background: #111210; color: #efeee8; fo
   .form-row { grid-template-columns: 1fr; }
   .hero-actions { align-items: stretch; width: 100%; gap: 12px; }
   .hero-actions > * { width: 100%; }
-  .hero-figure figcaption { padding-inline: 18px; }
   .capability-strip { justify-content: flex-start; gap: 12px 20px; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {

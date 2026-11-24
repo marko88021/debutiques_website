@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight } from 'lucide-react';
+import { HeroFilm } from './HeroFilm';
 interface HeroProps {
   heroRef: React.RefObject<HTMLDivElement>;
   scheduleRef: React.RefObject<HTMLDivElement>;
@@ -21,10 +22,7 @@ export function Hero({ heroRef, scheduleRef, showcaseRef, scrollToSection }: Her
         </div>
         <p className="hero-note">Product imagery · Interior CGI · Animation</p>
       </div>
-      <figure className="hero-figure">
-        <img src="/assets/interiors/A3_cam01_set01_132f.jpg" alt="Debutiques interior CGI: timber dining table and upholstered chairs beneath a globe pendant" width="1500" height="1500" decoding="async" />
-        <figcaption><span>Form. Material. Atmosphere.</span><span>Selected interior CGI / 01</span></figcaption>
-      </figure>
+      <HeroFilm />
       </div>
     </section>
   );

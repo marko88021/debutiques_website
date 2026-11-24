@@ -15,6 +15,7 @@ const PrivacyPolicy = lazy(() => import('@/components/PrivacyPolicy'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const PricingPage = lazy(() => import('@/pages/PricingPage'));
+const AssemblyPage = lazy(() => import('@/pages/AssemblyPage'));
 const AdminRoutes = lazy(() => import('@/components/AdminRoutes'));
 
 declare global {
@@ -74,6 +75,7 @@ function AppShell() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/assembly" element={<AssemblyPage />} />
               <Route path="/admin/*" element={<AdminRoutes />} />
               <Route path="*" element={<main className="standalone-page"><Link to="/">← Debutiques</Link><h1>Page not found</h1><p>Explore our furniture portfolio or tell us about your project.</p><Link className="editorial-button" to="/">Return to the studio</Link></main>} />
             </Routes>

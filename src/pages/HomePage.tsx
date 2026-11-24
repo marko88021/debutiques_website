@@ -277,7 +277,7 @@ function HomePage() {
     { icon: <ImageIcon className="h-8 w-8" />, title: t('services.renderings.title'), description: t('services.renderings.description') },
     { icon: <Video className="h-8 w-8" />, title: t('services.animations.title'), description: t('services.animations.description') },
     { icon: <RotateCw className="h-8 w-8" />, title: t('services.360Animations.title'), description: t('services.360Animations.description') },
-    { icon: <Hammer className="h-8 w-8" />, title: t('services.assemblyAnimations.title'), description: t('services.assemblyAnimations.description') },
+    { icon: <Hammer className="h-8 w-8" />, title: t('services.assemblyAnimations.title'), description: t('services.assemblyAnimations.description'), link: '/assembly' },
     { icon: <Home className="h-8 w-8" />, title: t('services.interiorShots.title'), description: t('services.interiorShots.description') },
   ];
 
@@ -632,6 +632,7 @@ function HomePage() {
                 <div className="mb-6 text-neutral-300">{service.icon}</div>
                 <h3 className="text-xl font-light mb-4">{service.title}</h3>
                 <p className="text-neutral-400 font-light text-sm">{service.description}</p>
+                {service.link && <Link className="editorial-link mt-3" to={service.link}>Watch assembly videos</Link>}
               </div>
             ))}
           </div>
