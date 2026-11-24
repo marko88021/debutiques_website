@@ -266,6 +266,7 @@ function HomePage() {
   const navigationItems = [
     { label: t('navigation.services'), ref: servicesRef, id: 'services' },
     { label: t('navigation.showcase'), ref: showcaseRef, id: 'showcase' },
+    { label: 'Assembly Animations', ref: null, id: 'assembly', link: '/assembly' },
     { label: t('navigation.process'), ref: processRef, id: 'process' },
     { label: t('navigation.about'), ref: aboutRef, id: 'about' },
     { label: 'Blog', ref: null, id: 'blog', link: '/blog' },
@@ -441,7 +442,7 @@ function HomePage() {
 
             {/* CENTER: Primary nav */}
             <div className="hidden xl:flex justify-center min-w-0">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 2xl:gap-4">
                 {navigationItems.map((item) => (
                   item.link ? (
                     <Link
