@@ -1,22 +1,34 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Copy, Mail } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 export function ProjectInquiry() {
-  const [draft, setDraft] = useState<{ body: string; href: string } | null>(null);
-  const [copyStatus, setCopyStatus] = useState('');
-  function prepareInquiry(event: FormEvent<HTMLFormElement>) {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const sending = useRef(false);
+
+  async function sendInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const values = new FormData(event.currentTarget);
-    const value = (key: string) => String(values.get(key) || '').trim();
-    const body = `Hello Debutiques,\n\nI'd like to discuss a furniture visualization project.\n\nName: ${value('name')}\nEmail: ${value('email')}\nBrand / company: ${value('company') || 'Not specified'}\nService: ${value('service')}\nTarget timing: ${value('timing') || 'To discuss'}\n\nProject brief:\n${value('brief')}\n\nThank you,\n${value('name')}`;
-    setDraft({ body, href: `mailto:info@debutiques.com?subject=${encodeURIComponent('Furniture visualization inquiry')}&body=${encodeURIComponent(body)}` });
-    setCopyStatus('');
-  }
-  async function copyBrief() {
-    if (!draft) return;
-    try { await navigator.clipboard.writeText(draft.body); setCopyStatus('Brief copied. Paste it into an email to info@debutiques.com.'); }
-    catch { setCopyStatus('Select and copy the brief below, then email info@debutiques.com.'); }
+    if (sending.current) return;
+    const form = event.currentTarget;
+    const body = new URLSearchParams();
+    for (const [key, value] of new FormData(form)) body.set(key, String(value).trim());
+    if (!body.get('name') || !body.get('brief')) {
+      setStatus('error');
+      return;
+    }
+
+    sending.current = true;
+    setStatus('sending');
+    try {
+      const result = await fetch('/api/inquiry', { method: 'POST', body });
+      if (!result.ok || (await result.json()).sent !== true) throw new Error('Form submission failed');
+      form.reset();
+      setStatus('sent');
+    } catch {
+      setStatus('error');
+    } finally {
+      sending.current = false;
+    }
   }
   return (
     <div className="inquiry-layout">
@@ -26,9 +38,10 @@ export function ProjectInquiry() {
         <p>A single product, a new finish, or an entire collection. Share what you have and what you need; we’ll discuss the scope with you.</p>
         <a className="contact-email" href="mailto:info@debutiques.com">info@debutiques.com <ArrowUpRight size={20} aria-hidden="true" /></a>
         <p className="inquiry-note">Prefer a conversation? <a href="https://calendly.com/debutiques/meeting" target="_blank" rel="noopener noreferrer">Book a call on Calendly ↗</a></p>
-        <p className="inquiry-note">Your brief stays in this page until you open your email app or copy it. You review and send the email yourself.</p>
       </div>
-      <form className="inquiry-form" onSubmit={prepareInquiry} onChange={() => { setDraft(null); setCopyStatus(''); }}>
+      <form className="inquiry-form" method="POST" action="/api/inquiry" onSubmit={sendInquiry} onChange={() => { if (!sending.current) setStatus('idle'); }} aria-busy={status === 'sending'}>
+
+        <div hidden><label>Leave this blank<input name="bot-field" tabIndex={-1} autoComplete="off" /></label></div>
         <div className="form-row">
           <label htmlFor="inquiry-name">Your name <span>(required)</span><input id="inquiry-name" name="name" autoComplete="name" required maxLength={80} /></label>
           <label htmlFor="inquiry-email">Email <span>(required)</span><input id="inquiry-email" name="email" type="email" autoComplete="email" required maxLength={120} /></label>
@@ -39,14 +52,10 @@ export function ProjectInquiry() {
         </div>
         <label htmlFor="inquiry-brief">About the project <span>(required)</span><textarea id="inquiry-brief" name="brief" rows={4} required maxLength={1000} placeholder="Products, finishes, image or animation requirements, and where you’ll use the visuals." /></label>
         <label htmlFor="inquiry-timing">Target timing <span>(optional)</span><input id="inquiry-timing" name="timing" maxLength={80} placeholder="Launch date or an approximate timeframe" /></label>
-        <p className="inquiry-note">You can add reference files in your email app. <Link to="/privacy-policy">Privacy policy</Link></p>
-        <button type="submit" className="editorial-button">Prepare email inquiry <ArrowUpRight size={18} aria-hidden="true" /></button>
-        {draft && <div className="inquiry-draft">
-          <p role="status">Your brief is ready. It has not been sent.</p>
-          <div className="draft-actions"><a href={draft.href} className="editorial-button"><Mail size={16} aria-hidden="true" />Open email draft</a><button type="button" className="editorial-link" onClick={copyBrief}><Copy size={16} aria-hidden="true" />Copy brief</button></div>
-          <label htmlFor="inquiry-preview">Review your brief<textarea id="inquiry-preview" readOnly value={draft.body} rows={7} /></label>
-          <p aria-live="polite">{copyStatus}</p>
-        </div>}
+        <p className="inquiry-note">We’ll use your details to reply to your inquiry. <Link to="/privacy-policy">Privacy policy</Link></p>
+        <button type="submit" className="editorial-button" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send inquiry'}</button>
+        {status === 'sent' && <p role="status">Thanks. We received your inquiry and will reply by email.</p>}
+        {status === 'error' && <p role="alert">We couldn’t send your inquiry. Check the required fields and try again, or email <a className="underline" href="mailto:info@debutiques.com">info@debutiques.com</a>.</p>}
       </form>
     </div>
   );
